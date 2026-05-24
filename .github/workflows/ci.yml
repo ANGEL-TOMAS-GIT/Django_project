@@ -28,9 +28,9 @@ jobs:
 
       - name: Run flake8
         run: |
-          flake8 course/homeworks/projects/django_project/payments \
-          course/homeworks/projects/django_project/books \
-          course/homeworks/projects/django_project/custom_user_account \
+          flake8 django_project/payments \
+          django_project/books \
+          django_project/custom_user_account \
           --exclude=migrations \
           --max-line-length=120
 
