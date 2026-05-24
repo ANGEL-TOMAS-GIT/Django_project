@@ -12,7 +12,6 @@ services:
               gunicorn django_project.wsgi:application --bind 0.0.0.0:8000 --workers 3
             "
     environment:
-      DB_TYPE: postgres
       RESTORE_DUMP: true
       DUMP_FILE: ./sqlite_dump.json
     env_file:
@@ -22,33 +21,33 @@ services:
     expose:
       - "8000"
     depends_on:
-      db:
+      postgres:
         condition: service_healthy
         restart: true
     networks:
       - course_net
-#
-#  app_dude:
-#    build:
-#      context: .
-#      dockerfile: Dockerfile
-#    entrypoint: [ '/app/entrypoint.sh' ]
-#    command: >
-#      sh -c "python manage.py migrate &&
-#            python manage.py runserver 0.0.0.0:8001"
-#    volumes:
-#      - .:/app
-#    expose:
-#      - "8001"
-#    env_file:
-#      - .env
-#    depends_on:
-#      - db
-#    networks:
-#      - course_net
+  #
+  #  app_dude:
+  #    build:
+  #      context: .
+  #      dockerfile: Dockerfile
+  #    entrypoint: [ '/app/entrypoint.sh' ]
+  #    command: >
+  #      sh -c "python manage.py migrate &&
+  #            python manage.py runserver 0.0.0.0:8001"
+  #    volumes:
+  #      - .:/app
+  #    expose:
+  #      - "8001"
+  #    env_file:
+  #      - .env
+  #    depends_on:
+  #      - postgres
+  #    networks:
+  #      - course_net
 
 
-  db:
+  postgres:
     image: postgres:16-alpine
     restart: unless-stopped
     expose:

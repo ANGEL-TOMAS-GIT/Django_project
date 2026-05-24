@@ -73,6 +73,7 @@ jobs:
 
       - name: Run tests
         run: python django_project/manage.py test books
+
         env:
           DJANGO_SETTINGS_MODULE: django_project.settings
           POSTGRES_DB: test_db
