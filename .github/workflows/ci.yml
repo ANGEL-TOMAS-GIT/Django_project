@@ -55,6 +55,6 @@ jobs:
           DJANGO_SETTINGS_MODULE: django_project.settings
 
       - name: Run tests
-        run: python manage.py test books
+        run: python django_project/manage.py test books
         env:
           DJANGO_SETTINGS_MODULE: django_project.settings
