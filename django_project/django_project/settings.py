@@ -57,14 +57,14 @@ INSTALLED_APPS = [
     'books.apps.BooksConfig',
     'custom_user_account.apps.CustomUserAccountConfig',
     'payments.apps.PaymentsConfig',
-    'debug_toolbar',
+    # 'debug_toolbar',
     'mptt',
     'django_celery_beat'
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
+    # 'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
