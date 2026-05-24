@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+{% load i18n %}
+{% load static %}
+
+{% get_current_language as LANGUAGE_CODE %}
+{% get_current_language_bidi as LANGUAGE_BIDI %}
+
+<html lang="{{ LANGUAGE_CODE }}" dir="{% if LANGUAGE_BIDI %}rtl{% else %}ltr{% endif %}">
+
+<head>
+	<meta charset="UTF-8">
+	<title>{% block title %}Book Collection{% endblock %}</title>
+	<link rel="stylesheet" href="{% static 'book_app_style.css' %}">
+</head>
+<body>
+<header>
+	<h1><a href="{% url 'home' %}">📖 Book Collection</a></h1>
+	<nav>
+		<a href="{% url 'home' %}">Home</a>
+	</nav>
+	<div>
+		<form action="{% url 'set_language' %} " method="post">
+			{% csrf_token %}
+			<input name="next" type="hidden" value="{{ redirect_to }}">
+			<select name="language">
+				{% get_available_languages as LANGUAGES %}
+				{% get_language_info_list for LANGUAGES as languages %}
+				
+				{% for language in languages %}
+				<option value="{{ language.code }}" {% if language.code == LANGUAGE_CODE %}selected{% endif %}>
+					{{ language.name_local }}
+				</option>
+				{% endfor %}
+			</select>
+			<input type="submit" value="{% trans 'Change Language' %}">
+		</form>
+	</div>
+</header>
+
+<main>
+	{% block content %} {% endblock %}
+</main>
+
+<footer>
+	<p>&copy; 2026 Book Collection App</p>
+</footer>
+</body>
+</html>

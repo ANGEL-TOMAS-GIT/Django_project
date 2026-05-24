@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}Update Book{% endblock %}
+
+{% block content %}
+    <section class="update-book-wrapper">
+        <div class="update-book-card">
+            <h2 class="update-book-title">
+                ✏ Update Book
+            </h2>
+            <form method="post" class="update-book-form" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="update-book-submit">
+                    💾 Update Book
+                </button>
+            </form>
+        </div>
+    </section>
+
+{% endblock %}

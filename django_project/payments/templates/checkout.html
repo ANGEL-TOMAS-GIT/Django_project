@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en">
+{% load static %}
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'checkout.css' %}">
+	<title>Checkout</title>
+	
+	<script src="https://js.stripe.com/v3/"></script>
+</head>
+<body>
+
+<div class="checkout-container">
+
+	<h1 class="checkout-title">
+		Payment Order #{{ order.id }}
+	</h1>
+	
+	<div class="form-group">
+		<label for="amount">Amount</label>
+		<input class="input" type="number" id="amount" value="{{ order.total_price }}" min="0.5" step="0.01">
+	</div>
+	
+	<div class="form-group">
+		<label for="currency">Currency</label>
+		<select class="input" id="currency">
+			<option value="usd" selected>USD</option>
+			<option value="eur">EUR</option>
+			<option value="uah">UAH</option>
+		</select>
+	</div>
+	
+	<div class="form-group">
+		<label for="description">Description payment</label>
+		<input class="input" id="description" type="text" placeholder="Description payment (Optional)">
+	</div>
+	
+	<div class="form-group">
+		<label>Card details</label>
+		<div id="payment-element" class="payment-box"></div>
+	</div>
+	
+	<button id="submit-btn" class="btn-pay" disabled>Payment</button>
+	
+	<div id="message" class="message"></div>
+
+</div>
+
+<script>
+	const STRIPE_PUBLIC_KEY = '{{ stripe_public_key }}';
+	const API_URL = '/payments/payments';
+	
+	/* global Stripe */
+	const stripe = Stripe (STRIPE_PUBLIC_KEY);
+	
+	let elements, paymentElement, clientSecret, paymentId;
+	
+	const submitBtn = document.getElementById ('submit-btn');
+	const messageDiv = document.getElementById ('message');
+	
+	function getCookie (name) {
+		const value = `; ${document.cookie}`;
+		const parts = value.split (`; ${name}=`);
+		if (parts.length === 2) return parts.pop ().split (';').shift ();
+		return '';
+	}
+	
+	async function createPaymentIntent () {
+		const csrfToken = getCookie ('csrftoken');
+		
+		const response = await fetch (`${API_URL}/create_payment_intent/`, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+				'X-CSRFToken': csrfToken,
+			},
+			body: JSON.stringify ({
+				amount: parseFloat (document.getElementById ('amount').value),
+				currency: document.getElementById ('currency').value,
+				description: document.getElementById ('description').value,
+			}),
+		});
+		
+		if ( ! response.ok) {
+			const err = await response.json ();
+			throw new Error (err.error || `HTTP ${response.status}`);
+		}
+		
+		const data = await response.json ();
+		
+		if ( ! data.client_secret) {
+			throw new Error ('Client secret is required!');
+		}
+		
+		clientSecret = data.client_secret;
+		paymentId = data.payment_id;
+		
+		return data;
+	}
+	
+	async function mountPaymentElement () {
+		await createPaymentIntent ();
+		
+		elements = stripe.elements ({
+			clientSecret: clientSecret,
+			appearance: {theme: 'stripe'}
+		});
+		
+		paymentElement = elements.create ('payment', {layout: 'tabs'});
+		paymentElement.mount ('#payment-element');
+		
+		submitBtn.disabled = false;
+	}
+	
+	async function handlePayment () {
+		submitBtn.disabled = true;
+		
+		try {
+			const {error, paymentIntent} = await stripe.confirmPayment ({
+				elements,
+				confirmParams: {
+					return_url: window.location.origin + '/checkout/?success=true'
+				},
+				redirect: 'if_required',
+			});
+			
+			if (error) {
+				messageDiv.textContent = error.message;
+				
+			} else if (paymentIntent && paymentIntent.status === 'succeeded') {
+				messageDiv.textContent = 'Payment successfully, ID payment: ' + paymentId;
+				confirmOnBackend (paymentId);
+				
+			} else if (paymentIntent) {
+				messageDiv.textContent = `Status: ${paymentIntent.status}`;
+			}
+			
+		} catch (err) {
+			messageDiv.textContent = err.message;
+			
+		} finally {
+			submitBtn.disabled = false;
+		}
+	}
+	
+	async function confirmOnBackend (paymentId) {
+		try {
+			await fetch (`${API_URL}/${paymentId}/confirm/`, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+					'X-CSRFToken': getCookie ('csrftoken'),
+				},
+			});
+			
+		} catch (err) {
+			console.warn ('Confirmation failed with:', err);
+		}
+	}
+	
+	document.addEventListener ('DOMContentLoaded', () => {
+		submitBtn.addEventListener ('click', handlePayment);
+		
+		mountPaymentElement ().catch (err => {
+			messageDiv.textContent = `Initialization error: ${err.message}`;
+		});
+	});
+	
+	if (new URLSearchParams (window.location.search).get ('success') === 'true') {
+		document.addEventListener ('DOMContentLoaded', () => {
+			messageDiv.textContent = 'Payment processed successfully';
+		});
+	}
+</script>
+
+</body>
+</html>

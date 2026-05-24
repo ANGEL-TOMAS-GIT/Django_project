@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block title %}Books{% endblock %}
+
+{% block content %}
+<h2 class="book_collection">
+    {% if single_book %}
+    Book Details
+    {% else %}
+    My Books Collection
+    {% endif %}
+</h2>
+<form method="get" class="search-form">
+    <input type="text" id="search" name="q" placeholder="🔍 Search books..." value="{{ query }}">
+    <button type="submit">Search</button>
+</form>
+
+{% if query %}
+<h3>Results for "{{ query }}"</h3>
+{% endif %}
+
+{% if empty %}
+<div class="alert-no-books">
+    📚 Your library is empty! Add some books to see them here.
+</div>
+{% endif %}
+<section class="books-grid">
+    <div class="book-container">
+        {% for book in books %}
+
+        <div class="library-book-card">
+            <a class="description" href="{% url 'book_detail' book.pk %}">
+                <div class="library-book-cover">
+                    <img src="{{ book.get_photo_url }}" alt="book cover">
+                </div>
+            </a>
+            <div class="text-container">
+                <h3 class="book-title"> 📖 {{ book.title }}</h3>
+                <p class="book-author">👤 {{ book.book_author }}</p>
+                <p class="category">🏷️ {{ book.category }}</p>
+                <p class="published">📅 Published at: {{ book.created_at }}</p>
+                <p class="price">💲 {{ book.price }}</p>
+
+                {% if book.stock > 0 %}
+                <p class="stock">📦 Available: {{ book.stock }}</p>
+
+                <form action="{% url 'cart_add' book.pk %}" method="post" class="add-to-cart-form">
+                    {% csrf_token %}
+
+                    <input type="number"
+                           name="quantity"
+                           value="1"
+                           min="1"
+                           max="{{ book.stock }}">
+
+                    <button type="submit">🛒 Add</button>
+                </form>
+
+                {% else %}
+                <h3>📦 Out of stock</h3>
+                {% endif %}
+            </div>
+
+        </div>
+
+        {% empty %}
+        <p>No Books found.</p>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}

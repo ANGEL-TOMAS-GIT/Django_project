@@ -1,0 +1,199 @@
+services:
+  app:
+    container_name: django_books_web_psql
+    restart: unless-stopped
+    build:
+      context: .
+      dockerfile: Dockerfile
+    entrypoint: [ '/app/entrypoint.sh' ]
+    command: >
+      sh -c "
+              python manage.py migrate &&
+              gunicorn django_project.wsgi:application --bind 0.0.0.0:8000 --workers 3
+            "
+    environment:
+      DB_TYPE: postgres
+      RESTORE_DUMP: true
+      DUMP_FILE: ./sqlite_dump.json
+    env_file:
+      - .env
+    volumes:
+      - .:/app
+    expose:
+      - "8000"
+    depends_on:
+      db:
+        condition: service_healthy
+        restart: true
+    networks:
+      - course_net
+#
+#  app_dude:
+#    build:
+#      context: .
+#      dockerfile: Dockerfile
+#    entrypoint: [ '/app/entrypoint.sh' ]
+#    command: >
+#      sh -c "python manage.py migrate &&
+#            python manage.py runserver 0.0.0.0:8001"
+#    volumes:
+#      - .:/app
+#    expose:
+#      - "8001"
+#    env_file:
+#      - .env
+#    depends_on:
+#      - db
+#    networks:
+#      - course_net
+
+
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    expose:
+      - "5432"
+    env_file:
+      - .env
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - course_net
+
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    expose:
+      - "6379"
+    networks:
+      - course_net
+
+  celery_beat:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: >
+      celery -A django_project beat --loglevel=info --uid=nobody
+    volumes:
+      - .:/app
+    env_file:
+      - .env
+    depends_on:
+      - redis
+    networks:
+      - course_net
+
+
+  celery_worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: >
+      celery -A django_project worker --loglevel=info --uid=nobody
+    volumes:
+      - .:/app
+    env_file:
+      - .env
+    depends_on:
+      - redis
+    networks:
+      - course_net
+
+  flower:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: >
+      celery -A django_project flower --port=5555
+    volumes:
+      - .:/app
+    env_file:
+      - .env
+    depends_on:
+      - redis
+      - celery_worker
+    ports:
+      - "5555:5555"
+    networks:
+      - course_net
+
+  kanchi:
+    image: getkanchi/kanchi
+    container_name: kanchi_django_project
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+      - "8765:8765"
+    environment:
+      CELERY_BROKER_URL: ${CELERY_BROKER_URL}
+      CELERY_RESULT_BACKEND: ${CELERY_RESULT_BACKEND}
+      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}
+    volumes:
+      - kanchi-data:/data
+    env_file:
+      - .env
+    depends_on:
+      - redis
+      - celery_worker
+    networks:
+      - course_net
+
+  nginx:
+    image: nginx:latest
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+      - ./certs/:/etc/nginx/certs
+      - ./static:/code/static
+    depends_on:
+      - app
+    networks:
+      - course_net
+
+  openssl:
+    image: alpine/openssl
+    volumes:
+      - ./certs:/certs
+    command: >
+      req -x509 -nodes -newkey rsa:4096 -keyout /certs/cert.key
+      -out /certs/cert.crt -days 365
+      -subj "/C=GE/ST=Cologne/L=Cologne/O=Course/OU=Lecture/CN=-localhost"
+
+  minio:
+    image: minio/minio
+    container_name: minio
+    restart: always
+    networks:
+      minio-network:
+    ports:
+      - "9222:9000"
+      - "9223:9002"
+    environment:
+      - MINIO_ROOT_USER=${AWS_ACCESS_KEY_ID}
+      - MINIO_ROOT_PASSWORD=${AWS_SECRET_KEY}
+    volumes:
+      - ./data:/data
+    command: [ "server", "--console-address", ":9002", "/data" ]
+
+
+volumes:
+  kanchi-data:
+  minio-volume:
+    driver: local
+
+
+networks:
+  course_net:
+    driver: bridge
+  minio-network:
+    driver: bridge
+
+
+

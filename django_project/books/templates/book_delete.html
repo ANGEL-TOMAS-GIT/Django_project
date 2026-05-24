@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %}Delete Book{% endblock %}
+
+{% block content %}
+    <section class="delete-book-container">
+        <form method="post" class="delete-book-form">{% csrf_token %}
+            <h3 class="delete-title">🗑 Delete Book</h3>
+            <p class="delete-warning">Are you sure you want to delete?</p>
+            <div class="delete-book-name">
+            <span>"{{ object.title }}"</span>
+            </div>
+            <div class="delete-actions">
+                <button type="submit" class="delete-confirm" value="Confirm">
+                    ❌ Confirm Delete
+                </button>
+                <a href="{% url 'manage_books' %}" class="delete-cancel">
+                    ↩ Cancel
+                </a>
+            </div>
+        </form>
+    </section>
+{% endblock %}

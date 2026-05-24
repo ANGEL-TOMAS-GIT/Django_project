@@ -1,0 +1,36 @@
+# =====================================================
+# Environment files (Do NOT commit these!)
+# =====================================================
+*logs*
+env
+htmlcov
+static
+*_coverage
+data
+certs
+
+
+
+
+# Node modules
+node_modules/
+
+# Python cache files
+__pycache__/
+*.pyc
+
+# Pycharm files
+.idea
+.qodo
+
+instance/
+
+.pytest_cache/
+.coverage
+htmlcov/
+
+dist/
+build/
+*.egg-info/
+
+migrations_backup/

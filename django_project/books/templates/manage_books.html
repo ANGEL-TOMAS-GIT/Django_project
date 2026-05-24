@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block title %}Manage Books{% endblock %}
+
+{% block content %}
+    <h2 class="library-panel-title">Manage Your Book Library</h2>
+    <form method="get" class="library-search-bar">
+        <input type="text" name="q" placeholder="🔍 Search books to Update..." value="{{ query|default:'' }}">
+        <button type="submit">Search</button>
+    </form>
+    <section class="library-grid">
+
+        {% for book in books %}
+
+            <div class="library-book-card">
+                <div class="library-book-cover">
+                    <img src="{{ book.get_photo_url }}" alt="book cover">
+                </div>
+                <div class="library-book-info">
+                    <h3 class="library-book-title">
+                        {{ book.title }}
+                    </h3>
+                    <p class="library-book-author">
+                        👤 {{ book.book_author }}
+                    </p>
+                    <p class="library-book-category">
+                        🏷 {{ book.category }}
+                    </p>
+
+                </div>
+                <div class="card-actions">
+                    <a href="{% url 'update_book' book.pk %}" class="update-button">
+                        ✏ Update
+                    </a>
+                    <a href="{% url 'delete_book' book.pk %}" class="delete-button">
+                        ❌ Delete
+                    </a>
+                </div>
+            </div>
+        {% empty %}
+            <p class="library-no-books">
+                📚 No books found in your library
+            </p>
+        {% endfor %}
+    </section>
+{% endblock %}

@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+    <section class="home-hero">
+        <div class="hero-text">
+            <h1>📚 Welcome to My Book App</h1>
+            <p>Discover new books, check ratings, and explore detailed descriptions of your favorites!</p>
+        </div>
+    </section>
+    <section class="home-features">
+        <h2>Why You'll Love Our Library</h2>
+        <div class="feature-cards">
+            <a href="{% url 'manage_books' %}" class="feature-card-link">
+                <div class="feature-card">
+                    <h3>✏ Update Books</h3>
+                    <p>Modify existing books in your collection and keep their information up to date.</p>
+                </div>
+            </a>
+            <a href="{% url 'create_book' %}" class="feature-card-link">
+                <div class="feature-card">
+                    <h3>📚 Add Books</h3>
+                    <p>Create a new entry in your library and organize your books easily.</p>
+                </div>
+            </a>
+            <a href="{% url 'books' %}" class="feature-card-link">
+                <div class="feature-card">
+                    <h3>🔍 Easy Search</h3>
+                    <p>Find books quickly with our intuitive search and filter options.</p>
+                </div>
+            </a>
+        </div>
+    </section>
+{% endblock %}

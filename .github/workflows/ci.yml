@@ -1,0 +1,60 @@
+name: Pipelines for Django_project project
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Setup Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install flake8
+
+      - name: Run flake8
+        run: |
+          flake8 course/homeworks/projects/django_project/payments \
+          course/homeworks/projects/django_project/books \
+          course/homeworks/projects/django_project/custom_user_account \
+          --exclude=migrations \
+          --max-line-length=120
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run migrations
+        run: python manage.py migrate
+        env:
+          DJANGO_SETTINGS_MODULE: django_project.settings
+
+      - name: Run tests
+        run: python manage.py test books
+        env:
+          DJANGO_SETTINGS_MODULE: django_project.settings
