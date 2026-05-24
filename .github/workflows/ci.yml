@@ -65,6 +65,11 @@ jobs:
         run: python django_project/manage.py migrate
         env:
           DJANGO_SETTINGS_MODULE: django_project.settings
+          POSTGRES_DB: test_db
+          POSTGRES_USER: test_user
+          POSTGRES_PASSWORD: test_password
+          POSTGRES_HOST: postgres
+          POSTGRES_PORT: 5432
 
       - name: Run tests
         run: python django_project/manage.py test books
