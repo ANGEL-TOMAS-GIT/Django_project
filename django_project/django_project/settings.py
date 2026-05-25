@@ -314,7 +314,7 @@ CACHES = {
         'LOCATION': 'redis://redis:6379/1',
         'TIMEOUT': 5 * 60,
         'KEY_PREFIX': 'project'
-
+        
     },
     'page_cache': {
         'BACKEND': 'django.core.cache.backends.redis.RedisCache',
@@ -424,25 +424,29 @@ STORAGES = {
 #               SENTRY-CONF                       #
 ###################################################
 
-#
-# import sentry_sdk
-# import logging
-# from sentry_sdk.integrations.django import DjangoIntegration
-# from sentry_sdk.integrations.logging import LoggingIntegration
-# from sentry_sdk.integrations.celery import CeleryIntegration
-# from sentry_sdk.integrations.redis import RedisIntegration
-#
-# sentry_sdk.init(
-#     dsn="https://e8ee2e86546a8fb43a84be2a30ebf57a@o4511450103545856.ingest.de.sentry.io/4511450364444752",
-#     integrations=[
-#         DjangoIntegration(),
-#         LoggingIntegration(
-#             event_level=logging.ERROR
-#         ),
-#         CeleryIntegration(),
-#         RedisIntegration()
-#     ],
-#     attach_stacktrace=True,
-#     environment='development' if DEBUG else 'production-project',
-#     send_default_pii=True,
-# )
+
+import sentry_sdk
+import logging
+from sentry_sdk.integrations.django import DjangoIntegration
+from sentry_sdk.integrations.logging import LoggingIntegration
+from sentry_sdk.integrations.celery import CeleryIntegration
+from sentry_sdk.integrations.redis import RedisIntegration
+
+
+
+IS_GITHUB_ACTIONS = os.getenv('GITHUB_ACTIONS') == 'true'
+if not IS_GITHUB_ACTIONS:
+    sentry_sdk.init(
+        dsn="https://e8ee2e86546a8fb43a84be2a30ebf57a@o4511450103545856.ingest.de.sentry.io/4511450364444752",
+        integrations=[
+            DjangoIntegration(),
+            LoggingIntegration(
+                event_level=logging.ERROR
+            ),
+            CeleryIntegration(),
+            RedisIntegration()
+        ],
+        attach_stacktrace=True,
+        environment='development' if DEBUG else 'production-project',
+        send_default_pii=True,
+    )
