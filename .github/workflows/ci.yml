@@ -67,15 +67,12 @@ jobs:
 
       - name: Install redis first (modern version)
         run: |
-          pip install --no-cache-dir --force-reinstall 'redis>=5.0.0'
+           python -c "import redis; print(f'Redis version: {redis.__version__}'); print(f'Redis location: {redis.__file__}')" && \
+           python -c "from redis.client import Redis; print('Import successful')"
 
       - name: Install other dependencies
         run: |
           pip install --no-cache-dir -r django_project/requirements.txt
-
-      - name: Verify redis version
-        run: |
-          python -c "import redis; print(f'Redis version: {redis.__version__}')"
 
       - name: Run migrations
         run: python django_project/manage.py migrate
