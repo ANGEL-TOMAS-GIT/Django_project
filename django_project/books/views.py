@@ -147,7 +147,7 @@ class UploadS3FilesView(View):
             default_storage.save(file.name, ContentFile(file.read()))
             messages.success(request, f'Archivo "{file.name}" subido correctamente')
         return redirect('s3_files_list')
-    
+
     def get(self, request):
         return redirect('s3_files_list')
 
