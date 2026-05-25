@@ -1,0 +1,33 @@
+{% if errors %}
+<div>
+	<ul>
+		{% for error in errors %}
+		<li>{{ error }}</li>
+	</ul>
+</div>
+{% endif %}
+
+<form method="post" enctype="multipart/form-data">
+	{% csrf_token %}
+	<input type="file" name="file">
+	<button type="submit" formaction="{% url 'upload_s3_file' %}">Upload</button>
+</form>
+
+<table>
+	<thead>
+	<tr>
+		<th>Name</th>
+		<th>Size</th>
+		<th>Last Modified</th>
+	</tr>
+	</thead>
+	<tbody>
+	{% for file_ in files %}
+	<tr>
+		<td>{{ file_.file_name }}</td>
+		<td>{{ file_.size }}</td>
+		<td>{{ file_.last_modified }}</td>
+	</tr>
+	{% endfor %}
+	</tbody>
+</table>

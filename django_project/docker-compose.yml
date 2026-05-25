@@ -23,28 +23,27 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
-        restart: true
     networks:
       - course_net
-  #
-  #  app_dude:
-  #    build:
-  #      context: .
-  #      dockerfile: Dockerfile
-  #    entrypoint: [ '/app/entrypoint.sh' ]
-  #    command: >
-  #      sh -c "python manage.py migrate &&
-  #            python manage.py runserver 0.0.0.0:8001"
-  #    volumes:
-  #      - .:/app
-  #    expose:
-  #      - "8001"
-  #    env_file:
-  #      - .env
-  #    depends_on:
-  #      - postgres
-  #    networks:
-  #      - course_net
+
+  app_dude:
+      build:
+        context: .
+        dockerfile: Dockerfile
+      entrypoint: [ '/app/entrypoint.sh' ]
+      command: >
+        sh -c "python manage.py migrate &&
+              python manage.py runserver 0.0.0.0:8001"
+      volumes:
+        - .:/app
+      expose:
+        - "8001"
+      env_file:
+        - .env
+      depends_on:
+        - postgres
+      networks:
+        - course_net
 
 
   postgres:
