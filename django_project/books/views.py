@@ -149,7 +149,6 @@ class UploadS3FilesView(View):
         return redirect('s3_files_list')
     
     def get(self, request):
-
         return redirect('s3_files_list')
 
 

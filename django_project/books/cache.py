@@ -26,7 +26,7 @@ def _category_key(category_id):
 
 
 def _category_list():
-    return f'category:list'
+    return 'category:list'
 
 
 def _category_child_list(parent_category_id):
@@ -71,16 +71,16 @@ def get_cached_category_list():
     key = _category_list()
     data = L2.get(key)
     if data is not None:
-        logger.debug(f'[L2 HIT] category:list')
+        logger.debug('[L2 HIT] category:list')
     else:
-        logger.debug(f'[L2 MISS] category:list')
+        logger.debug('[L2 MISS] category:list')
     return data
 
 
 def set_cached_category_list(data, timeout=TTL_L2_CATEGORY):
     key = _category_list()
     L2.set(key, data, timeout)
-    logger.debug(f'[L2 SET] category:list')
+    logger.debug('[L2 SET] category:list')
 
 
 def get_cached_user_orders(user_id):
