@@ -2,6 +2,8 @@ from .models import Book
 from django.db.models import Q
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.core.files.base import ContentFile
+from django.core.files.storage import default_storage
 from django.views.generic import (
     ListView,
     TemplateView,
@@ -136,3 +138,31 @@ class CartRemoveView(View):
         cart.remove(product)
         messages.info(request, f'{product.title} removed from the cart')
         return redirect("cart_detail")
+
+
+class UploadS3FilesView(View):
+    def post(self, request):
+        if request.FILES.get('file'):
+            file = request.FILES['file']
+            default_storage.save(file.name, ContentFile(file.read()))
+            messages.success(request, f'Archivo "{file.name}" subido correctamente')
+        return redirect('s3_files_list')
+
+    def get(self, request):
+        return redirect('s3_files_list')
+
+
+class S3FilesListView(View):
+    def get(self, request):
+        files = []
+        errors = []
+
+        try:
+            pass
+        except Exception as e:
+            errors.append(str(e))
+
+        return render(request, 's3_bucket/s3_files_list.html', {
+            'files': files,
+            'errors': errors
+        })

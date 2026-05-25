@@ -10,6 +10,8 @@ from .views import (
     CartAddView,
     CartDetailView,
     CartRemoveView,
+    UploadS3FilesView,
+    S3FilesListView
 )
 
 urlpatterns = [
@@ -23,4 +25,6 @@ urlpatterns = [
     path('cart/', CartDetailView.as_view(), name="cart_detail"),
     path('cart/add/<int:pk>/', CartAddView.as_view(), name="cart_add"),
     path('cart/remove/<int:pk>/', CartRemoveView.as_view(), name="cart_remove"),
+    path('upload_s3_files/', UploadS3FilesView.as_view, name='upload_s3_files'),
+    path('s3_files_list/', S3FilesListView.as_view, name='s3_files_list')
 ]

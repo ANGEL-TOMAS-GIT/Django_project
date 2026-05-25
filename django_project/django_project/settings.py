@@ -10,15 +10,14 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 import os
-from operator import truediv
 from pathlib import Path
-import os
-
-from django.conf.global_settings import CSRF_TRUSTED_ORIGINS, CSRF_COOKIE_SAMESITE, SESSION_COOKIE_SECURE, SECURE_SSL_REDIRECT, \
-    SECURE_PROXY_SSL_HEADER, X_FRAME_OPTIONS
 from dotenv import load_dotenv
 from datetime import timedelta
 from django.utils.translation import gettext_lazy as _
+from operator import truediv
+from django.conf.global_settings import CSRF_TRUSTED_ORIGINS, CSRF_COOKIE_SAMESITE, SESSION_COOKIE_SECURE, SECURE_SSL_REDIRECT, \
+    SECURE_PROXY_SSL_HEADER, X_FRAME_OPTIONS
+from wcwidth import propagate_sgr
 
 load_dotenv()
 
@@ -185,12 +184,19 @@ LOGGING = {
     
     'formatters': {
         'verbose': {
-            'format': '{asctime} {levelname} {module} {process:d} {thread:d} {message}',
+            'format': '[{levelname}] {asctime}  {name} {module} {process:d} {thread:d} {message}',
             'style': '{',
+            'datefmt': '%Y-%m-%d %H:%M:%S'
         },
         'simple': {
-            'format': '{levelname} {message}',
+            'format': '[{levelname}] {asctime} {message}',
             'style': '{',
+            'datefmt': '%Y-%m-%d %H:%M:%S'
+        },
+        
+        'json': {
+            '()': 'pythonjsonlogger.jsonlogger.JsonFormatter',
+            'format': '%(asctime)s %(name)s %(levelname)s %(module)s %(message)s',
         },
     },
     
@@ -210,51 +216,117 @@ LOGGING = {
             'class': 'logging.StreamHandler',
             'formatter': 'simple',
         },
-        'file': {
+        'file_all': {
             'level': 'DEBUG',
-            'class': 'logging.FileHandler',
-            'filename': os.path.join(LOGS_DIR, 'django.log'),
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join(LOGS_DIR, 'all.log'),
+            'maxBytes': 1024 * 1024 * 10,  # 10 MB
+            'backupCount': 10,
             'formatter': 'verbose',
+        },
+        'file_error': {
+            'level': 'ERROR',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join(LOGS_DIR, 'error.log'),
+            'maxBytes': 1024 * 1024 * 10,
+            'backupCount': 10,
+            'formatter': 'verbose',
+        },
+        'file_django': {
+            'level': 'DEBUG',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join(LOGS_DIR, 'django.log'),
+            'maxBytes': 1024 * 1024 * 10,
+            'backupCount': 10,
+            'formatter': 'verbose',
+        },
+        'file_db': {
+            'level': 'DEBUG',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join(LOGS_DIR, 'database.log'),
+            'maxBytes': 1024 * 1024 * 10,
+            'backupCount': 10,
+            'formatter': 'verbose',
+            'filters': ['require_debug_true']
         },
     },
     
     'loggers': {
-        'django': {
-            'handlers': ['file'],
+        
+        '': {
+            'handlers': ['console', 'file_all', 'file_error'],
             'level': 'INFO',
+            'propagate': False
         },
+        
+        'django': {
+            'handlers': ['console', 'file_django', 'file_error'],
+            'level': 'DEBUG',
+            'propagate': False
+        },
+        
         'django.request': {
-            'handlers': ['file'],
+            'handlers': ['file_error'],
             'level': 'ERROR',
+            'propagate': False,
         },
+        
         'django.db.backends': {
-            'handlers': ['file'],
+            'handlers': ['file_db'],
             'level': 'DEBUG',
+            'propagate': False
         },
+        
         'books': {
-            'handlers': ['file'],
+            'handlers': ['console', 'file_all', 'file_error'],
             'level': 'DEBUG',
+            'propagate': False
         },
         'custom_user_account': {
-            'handlers': ['file'],
+            'handlers': ['console', 'file_all', 'file_error'],
             'level': 'DEBUG',
+            'propagate': False
+        },
+        'payments': {
+            'handlers': ['console', 'file_all', 'file_error'],
+            'level': 'DEBUG',
+            'propagate': False
         },
         'middleware': {
-            'handlers': ['file'],
+            'handlers': ['console', 'file_all', 'file_error'],
             'level': 'DEBUG',
-            'propagate': True,
+            'propagate': False,
         },
     },
 }
-
-CACHES_LAYERS = {
+#
+# CHANNEL_LAYERS = {
+#     'default': {
+#         'BACKEND': 'channels_redis.core.RedisChannelLayer',
+#         'CONFIG': {
+#             'hosts': [('redis', 6379)]
+#         }
+#     }
+# }
+CACHES = {
     'default': {
-        'BACKEND': 'channels_redis.core.RedisChannelLayer',
-        'CONFIG': {
-            'host': [('redis', 6379)]
-        }
+        'BACKEND': 'django.core.cache.backends.redis.RedisCache',
+        'LOCATION': 'redis://redis:6379/1',
+        'TIMEOUT': 5 * 60,
+        'KEY_PREFIX': 'project'
+        
+    },
+    'page_cache': {
+        'BACKEND': 'django.core.cache.backends.redis.RedisCache',
+        'TIMEOUT': 15 * 60,
+        'KEY_PREFIX': 'project_page'
     }
 }
+
+###################################################
+#                     CELERY                      #
+###################################################
+
 
 CELERY_BROKER_URL = os.getenv('CELERY_BROKER_URL')
 CELERY_RESULT_BACKEND = os.getenv('CELERY_RESULT_BACKEND')
@@ -268,6 +340,10 @@ CART_SESSION_ID = 'cart'
 
 STRIPE_PUBLIC_KEY = ''
 STRIPE_SECRET_KEY = ''
+
+###################################################
+#             REST_FRAMEWORK                      #
+###################################################
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICACION_CLASSES': [
@@ -297,9 +373,10 @@ SIMPLE_JWT = {
     'USER_ID_FIELDS': ['id', 'email']
 }
 
-DEFAULT_EMAIL_FROM = 'angelotomas87.atg2@mail.com'
+###################################################
+#                   SSL                          #
+###################################################
 
-# SSL
 
 CSRF_COOKIE_SECURE = True
 CSRF_TRUSTED_ORIGINS = ['https://localhost']
@@ -313,7 +390,10 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 SECURER_BROWSER_XSS_FILTER = True
 X_FRAME_OPTIONS = 'DENY'
 
-# AWS S3w
+###################################################
+#                    AWS S3w                      #
+###################################################
+
 
 AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
 AWS_SECRET_KEY = os.getenv('AWS_SECRET_KEY')
@@ -321,7 +401,9 @@ AWS_SECRET_KEY = os.getenv('AWS_SECRET_KEY')
 AWS_S3_ENDPOINT_URL = 'http://localhost:9002'
 AWS_STORAGE_BUCKET_NAME = os.getenv('AWS_STORAGE_BUCKET_NAME')
 
-# STORAGE CONF
+###################################################
+#                STORAGE CONF                     #
+###################################################
 
 STORAGES = {
     'default': {
@@ -332,16 +414,39 @@ STORAGES = {
             'endpoint_url': AWS_S3_ENDPOINT_URL,
             'bucket_name': AWS_STORAGE_BUCKET_NAME
         }
-        
     },
     'staticfiles': {
         'BACKEND': 'django.contrib.staticfiles.storage.StaticFilesStorage'
     }
 }
-#
-# sentry_sdk.init(
-#     dsn=os.getenv("SENTRY_DSN"),
-#     integrations=[DjangoIntegration()],
-#     traces_sample_rate=1.0,
-#     send_default_pii=False
-# )
+
+###################################################
+#               SENTRY-CONF                       #
+###################################################
+
+
+import sentry_sdk
+import logging
+from sentry_sdk.integrations.django import DjangoIntegration
+from sentry_sdk.integrations.logging import LoggingIntegration
+from sentry_sdk.integrations.celery import CeleryIntegration
+from sentry_sdk.integrations.redis import RedisIntegration
+
+
+
+IS_GITHUB_ACTIONS = os.getenv('GITHUB_ACTIONS') == 'true'
+if not IS_GITHUB_ACTIONS:
+    sentry_sdk.init(
+        dsn="https://e8ee2e86546a8fb43a84be2a30ebf57a@o4511450103545856.ingest.de.sentry.io/4511450364444752",
+        integrations=[
+            DjangoIntegration(),
+            LoggingIntegration(
+                event_level=logging.ERROR
+            ),
+            CeleryIntegration(),
+            RedisIntegration()
+        ],
+        attach_stacktrace=True,
+        environment='development' if DEBUG else 'production-project',
+        send_default_pii=True,
+    )
