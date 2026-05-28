@@ -85,6 +85,15 @@ jobs:
 
       - name: Run tests with coverage
         run: |
+          cd projectA/django_project
+          pytest \
+            --cov=books \
+            --cov=payments \
+            --cov=custom_user_account \
+            --cov-report=term \
+            --cov-report=xml \
+            --cov-fail-under=70 \
+            -v
           coverage run --source='books,payments,custom_user_account' projectA/django_project/manage.py test books payments custom_user_account
           coverage report --fail-under=70
         env:
