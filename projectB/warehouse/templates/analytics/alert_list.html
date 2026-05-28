@@ -1,0 +1,90 @@
+<!-- templates/analytics/alert_list.html -->
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Alerts" %} - {% trans "Warehouse Management" %}{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <h1 class="h3 mb-4 text-gray-800">{% trans "Stock Alerts" %}</h1>
+    
+    <div class="card shadow mb-4">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>{% trans "Product" %}</th>
+                            <th>{% trans "Alert Type" %}</th>
+                            <th>{% trans "Severity" %}</th>
+                            <th>{% trans "Current Stock" %}</th>
+                            <th>{% trans "Threshold" %}</th>
+                            <th>{% trans "Status" %}</th>
+                            <th>{% trans "Created" %}</th>
+                            <th>{% trans "Actions" %}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for alert in alerts %}
+                        <tr>
+                            <td>{{ alert.product_stock.sku }} - {{ alert.product_stock.name }}</td>
+                            <td>{{ alert.get_alert_type_display }}</td>
+                            <td>
+                                {% if alert.severity == 'critical' %}
+                                    <span class="badge bg-dark">{% trans "Critical" %}</span>
+                                {% elif alert.severity == 'high' %}
+                                    <span class="badge bg-danger">{% trans "High" %}</span>
+                                {% elif alert.severity == 'medium' %}
+                                    <span class="badge bg-warning">{% trans "Medium" %}</span>
+                                {% else %}
+                                    <span class="badge bg-info">{% trans "Low" %}</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ alert.current_quantity }}</td>
+                            <td>{{ alert.threshold_value }}</td>
+                            <td>
+                                {% if alert.is_resolved %}
+                                    <span class="badge bg-success">{% trans "Resolved" %}</span>
+                                {% else %}
+                                    <span class="badge bg-danger">{% trans "Active" %}</span>
+                                {% endif %}
+                             </td>
+                            <td>{{ alert.created_at|date:"Y-m-d H:i" }}</td>
+                            <td>
+                                {% if not alert.is_resolved %}
+                                <button class="btn btn-sm btn-success" onclick="resolveAlert({{ alert.id }})">
+                                    <i class="fas fa-check"></i> {% trans "Resolve" %}
+                                </button>
+                                {% endif %}
+                             </td>
+                         </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="8" class="text-center">{% trans "No alerts found" %}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function resolveAlert(alertId) {
+    if(confirm('{% trans "Resolve this alert?" %}')) {
+        fetch(`/api/analytics/alerts/${alertId}/resolve/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            location.reload();
+        });
+    }
+}
+</script>
+{% endblock %}

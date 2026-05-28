@@ -1,0 +1,142 @@
+# Spanish translations for Warehouse Management System
+msgid ""
+msgstr ""
+"Project-Id-Version: Warehouse Management System 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-05-27 12:49+0200\n"
+"PO-Revision-Date: 2026-05-27 13:00+0200\n"
+"Last-Translator: Angel Tomas <angel@example.com>\n"
+"Language-Team: Spanish Team <es@li.org>\n"
+"Language: es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: templates/base.html
+msgid "Warehouse Management"
+msgstr "Gestión de Almacén"
+
+#: templates/base.html
+msgid "Dashboard"
+msgstr "Tablero"
+
+#: templates/base.html
+msgid "Inventory"
+msgstr "Inventario"
+
+#: templates/base.html
+msgid "Warehouses"
+msgstr "Almacenes"
+
+#: templates/base.html
+msgid "Reports"
+msgstr "Reportes"
+
+#: templates/base.html
+msgid "Alerts"
+msgstr "Alertas"
+
+#: templates/base.html
+msgid "Login"
+msgstr "Iniciar sesión"
+
+#: templates/base.html
+msgid "Logout"
+msgstr "Cerrar sesión"
+
+#: templates/dashboard.html
+msgid "Total Products"
+msgstr "Total Productos"
+
+#: templates/dashboard.html
+msgid "Low Stock Items"
+msgstr "Productos con Stock Bajo"
+
+#: templates/dashboard.html
+msgid "Active Alerts"
+msgstr "Alertas Activas"
+
+#: templates/dashboard.html
+msgid "Recent Stock Movements"
+msgstr "Movimientos Recientes"
+
+#: templates/dashboard.html
+msgid "Product"
+msgstr "Producto"
+
+#: templates/dashboard.html
+msgid "Type"
+msgstr "Tipo"
+
+#: templates/dashboard.html
+msgid "Quantity"
+msgstr "Cantidad"
+
+#: templates/dashboard.html
+msgid "Date"
+msgstr "Fecha"
+
+#: templates/inventory/product_list.html
+msgid "Products"
+msgstr "Productos"
+
+#: templates/inventory/product_list.html
+msgid "Add Product"
+msgstr "Agregar Producto"
+
+#: templates/inventory/product_list.html
+msgid "SKU"
+msgstr "SKU"
+
+#: templates/inventory/product_list.html
+msgid "Name"
+msgstr "Nombre"
+
+#: templates/inventory/product_list.html
+msgid "Available"
+msgstr "Disponible"
+
+#: templates/inventory/product_list.html
+msgid "Status"
+msgstr "Estado"
+
+#: templates/inventory/warehouse_list.html
+msgid "Add Warehouse"
+msgstr "Agregar Almacén"
+
+#: templates/inventory/warehouse_list.html
+msgid "Location"
+msgstr "Ubicación"
+
+#: templates/inventory/warehouse_list.html
+msgid "Edit"
+msgstr "Editar"
+
+#: templates/analytics/report_list.html
+msgid "Inventory Reports"
+msgstr "Reportes de Inventario"
+
+#: templates/analytics/report_list.html
+msgid "Generate New Report"
+msgstr "Generar Nuevo Reporte"
+
+#: templates/analytics/alert_list.html
+msgid "Stock Alerts"
+msgstr "Alertas de Stock"
+
+#: templates/analytics/alert_list.html
+msgid "Resolve"
+msgstr "Resolver"
+
+#: inventory/views.py:64
+msgid "Sync started"
+msgstr "Sincronización iniciada"
+
+#: inventory/views.py:76
+msgid "quantity and movement_type required"
+msgstr "cantidad y tipo de movimiento requeridos"
+
+#: inventory/views.py:87
+msgid "Insufficient stock"
+msgstr "Stock insuficiente"

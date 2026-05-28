@@ -1,0 +1,351 @@
+# English translations for Warehouse Management System
+# Copyright (C) 2026
+# This file is distributed under the same license as the PACKAGE package.
+# Angel Tomas <angel@example.com>, 2026.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Warehouse Management System 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-05-27 12:49+0200\n"
+"PO-Revision-Date: 2026-05-27 13:00+0200\n"
+"Last-Translator: Angel Tomas <angel@example.com>\n"
+"Language-Team: English Team <en@li.org>\n"
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: accounts/admin.py:16
+msgid "Personal info"
+msgstr "Personal info"
+
+#: accounts/admin.py:17
+msgid "Permissions"
+msgstr "Permissions"
+
+#: accounts/admin.py:20
+msgid "Important dates"
+msgstr "Important dates"
+
+#: inventory/admin.py:18
+msgid "Información Básica"
+msgstr "Basic Information"
+
+#: inventory/admin.py:21 inventory/admin.py:107
+msgid "Estado"
+msgstr "Status"
+
+#: inventory/admin.py:31
+msgid "Productos en stock"
+msgstr "Products in stock"
+
+#: inventory/admin.py:37
+msgid "Cantidad total"
+msgstr "Total quantity"
+
+#: inventory/admin.py:63
+msgid "Información del Producto"
+msgstr "Product Information"
+
+#: inventory/admin.py:66
+msgid "Ubicación"
+msgstr "Location"
+
+#: inventory/admin.py:69
+msgid "Cantidades"
+msgstr "Quantities"
+
+#: inventory/admin.py:72
+msgid "Umbrales"
+msgstr "Thresholds"
+
+#: inventory/admin.py:75
+msgid "Información del Sistema"
+msgstr "System Information"
+
+#: inventory/admin.py:85
+msgid "Warehouse"
+msgstr "Warehouse"
+
+#: inventory/admin.py:97 inventory/admin.py:246
+msgid "Stock Disponible"
+msgstr "Available Stock"
+
+#: inventory/admin.py:151
+msgid "Movimiento"
+msgstr "Movement"
+
+#: inventory/admin.py:154
+msgid "Referencias"
+msgstr "References"
+
+#: inventory/admin.py:157
+msgid "Auditoría"
+msgstr "Audit"
+
+#: inventory/admin.py:166
+msgid "Producto"
+msgstr "Product"
+
+#: inventory/admin.py:188
+msgid "Tipo de Movimiento"
+msgstr "Movement Type"
+
+#: inventory/admin.py:196
+msgid "Creado por"
+msgstr "Created by"
+
+#: inventory/views.py:64
+msgid "Sync started"
+msgstr "Sync started"
+
+#: inventory/views.py:76
+msgid "quantity and movement_type required"
+msgstr "quantity and movement_type required"
+
+#: inventory/views.py:87
+msgid "Insufficient stock"
+msgstr "Insufficient stock"
+
+#: inventory/views.py:93
+msgid "Invalid movement_type. Use IN or OUT"
+msgstr "Invalid movement_type. Use IN or OUT"
+
+# Additional translations for templates
+#: templates/base.html
+msgid "Warehouse Management"
+msgstr "Warehouse Management"
+
+#: templates/base.html
+msgid "Dashboard"
+msgstr "Dashboard"
+
+#: templates/base.html
+msgid "Inventory"
+msgstr "Inventory"
+
+#: templates/base.html
+msgid "Warehouses"
+msgstr "Warehouses"
+
+#: templates/base.html
+msgid "Reports"
+msgstr "Reports"
+
+#: templates/base.html
+msgid "Alerts"
+msgstr "Alerts"
+
+#: templates/base.html
+msgid "Admin"
+msgstr "Admin"
+
+#: templates/base.html
+msgid "Logout"
+msgstr "Logout"
+
+#: templates/base.html
+msgid "Login"
+msgstr "Login"
+
+#: templates/base.html
+msgid "Warehouse Management System"
+msgstr "Warehouse Management System"
+
+#: templates/dashboard.html
+msgid "Total Products"
+msgstr "Total Products"
+
+#: templates/dashboard.html
+msgid "Low Stock Items"
+msgstr "Low Stock Items"
+
+#: templates/dashboard.html
+msgid "Active Alerts"
+msgstr "Active Alerts"
+
+#: templates/dashboard.html
+msgid "Recent Stock Movements"
+msgstr "Recent Stock Movements"
+
+#: templates/dashboard.html
+msgid "Product"
+msgstr "Product"
+
+#: templates/dashboard.html
+msgid "Type"
+msgstr "Type"
+
+#: templates/dashboard.html
+msgid "Quantity"
+msgstr "Quantity"
+
+#: templates/dashboard.html
+msgid "Date"
+msgstr "Date"
+
+#: templates/dashboard.html
+msgid "No movements found"
+msgstr "No movements found"
+
+#: templates/dashboard.html
+msgid "Recent Reports"
+msgstr "Recent Reports"
+
+#: templates/dashboard.html
+msgid "No reports found"
+msgstr "No reports found"
+
+#: templates/inventory/product_list.html
+msgid "Products"
+msgstr "Products"
+
+#: templates/inventory/product_list.html
+msgid "Add Product"
+msgstr "Add Product"
+
+#: templates/inventory/product_list.html
+msgid "SKU"
+msgstr "SKU"
+
+#: templates/inventory/product_list.html
+msgid "Name"
+msgstr "Name"
+
+#: templates/inventory/product_list.html
+msgid "Available"
+msgstr "Available"
+
+#: templates/inventory/product_list.html
+msgid "Status"
+msgstr "Status"
+
+#: templates/inventory/product_list.html
+msgid "Actions"
+msgstr "Actions"
+
+#: templates/inventory/product_list.html
+msgid "Overstock"
+msgstr "Overstock"
+
+#: templates/inventory/product_list.html
+msgid "Normal"
+msgstr "Normal"
+
+#: templates/inventory/product_list.html
+msgid "No products found"
+msgstr "No products found"
+
+#: templates/inventory/warehouse_list.html
+msgid "Add Warehouse"
+msgstr "Add Warehouse"
+
+#: templates/inventory/warehouse_list.html
+msgid "Location"
+msgstr "Location"
+
+#: templates/inventory/warehouse_list.html
+msgid "Active"
+msgstr "Active"
+
+#: templates/inventory/warehouse_list.html
+msgid "Inactive"
+msgstr "Inactive"
+
+#: templates/inventory/warehouse_list.html
+msgid "Edit"
+msgstr "Edit"
+
+#: templates/inventory/warehouse_list.html
+msgid "No warehouses found"
+msgstr "No warehouses found"
+
+#: templates/analytics/report_list.html
+msgid "Inventory Reports"
+msgstr "Inventory Reports"
+
+#: templates/analytics/report_list.html
+msgid "Generate New Report"
+msgstr "Generate New Report"
+
+#: templates/analytics/report_list.html
+msgid "Completed"
+msgstr "Completed"
+
+#: templates/analytics/report_list.html
+msgid "Pending"
+msgstr "Pending"
+
+#: templates/analytics/report_list.html
+msgid "Failed"
+msgstr "Failed"
+
+#: templates/analytics/report_list.html
+msgid "Generate new report?"
+msgstr "Generate new report?"
+
+#: templates/analytics/alert_list.html
+msgid "Stock Alerts"
+msgstr "Stock Alerts"
+
+#: templates/analytics/alert_list.html
+msgid "Alert Type"
+msgstr "Alert Type"
+
+#: templates/analytics/alert_list.html
+msgid "Severity"
+msgstr "Severity"
+
+#: templates/analytics/alert_list.html
+msgid "Current Stock"
+msgstr "Current Stock"
+
+#: templates/analytics/alert_list.html
+msgid "Threshold"
+msgstr "Threshold"
+
+#: templates/analytics/alert_list.html
+msgid "Created"
+msgstr "Created"
+
+#: templates/analytics/alert_list.html
+msgid "Critical"
+msgstr "Critical"
+
+#: templates/analytics/alert_list.html
+msgid "High"
+msgstr "High"
+
+#: templates/analytics/alert_list.html
+msgid "Medium"
+msgstr "Medium"
+
+#: templates/analytics/alert_list.html
+msgid "Low"
+msgstr "Low"
+
+#: templates/analytics/alert_list.html
+msgid "Resolved"
+msgstr "Resolved"
+
+#: templates/analytics/alert_list.html
+msgid "Active"
+msgstr "Active"
+
+#: templates/analytics/alert_list.html
+msgid "Resolve"
+msgstr "Resolve"
+
+#: templates/analytics/alert_list.html
+msgid "Resolve this alert?"
+msgstr "Resolve this alert?"
+
+#: templates/analytics/alert_list.html
+msgid "No alerts found"
+msgstr "No alerts found"
+
+#: templates/registration/login.html
+msgid "Login"
+msgstr "Login"

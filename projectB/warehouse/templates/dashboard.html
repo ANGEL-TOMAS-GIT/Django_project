@@ -1,0 +1,153 @@
+<!-- templates/dashboard.html -->
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Dashboard" %} - {% trans "Warehouse Management" %}{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <h1 class="h3 mb-4 text-gray-800">{% trans "Dashboard" %}</h1>
+    
+    <!-- Statistics Cards -->
+    <div class="row">
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                {% trans "Total Products" %}
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ total_products }}</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-boxes fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-success shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                {% trans "Warehouses" %}
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ total_warehouses }}</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-warehouse fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-warning shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                {% trans "Low Stock Items" %}
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ low_stock_count }}</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-exclamation-triangle fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-danger shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
+                                {% trans "Active Alerts" %}
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ active_alerts }}</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-bell fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Recent Movements -->
+    <div class="row">
+        <div class="col-lg-8 mb-4">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">{% trans "Recent Stock Movements" %}</h6>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>{% trans "Product" %}</th>
+                                    <th>{% trans "Type" %}</th>
+                                    <th>{% trans "Quantity" %}</th>
+                                    <th>{% trans "Date" %}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for movement in recent_movements %}
+                                <tr>
+                                    <td>{{ movement.product_stock.sku }}</td>
+                                    <td>
+                                        <span class="badge {% if movement.movement_type == 'IN' %}bg-success{% else %}bg-danger{% endif %}">
+                                            {{ movement.get_movement_type_display }}
+                                        </span>
+                                    </td>
+                                    <td>{{ movement.quantity }}</td>
+                                    <td>{{ movement.created_at|date:"Y-m-d H:i" }}</td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="4" class="text-center">{% trans "No movements found" %}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Recent Reports -->
+        <div class="col-lg-4 mb-4">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">{% trans "Recent Reports" %}</h6>
+                </div>
+                <div class="card-body">
+                    <div class="list-group">
+                        {% for report in recent_reports %}
+                        <a href="#" class="list-group-item list-group-item-action">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h6 class="mb-1">{{ report.get_report_type_display }}</h6>
+                                <small>{{ report.date|date:"Y-m-d" }}</small>
+                            </div>
+                            <small class="text-muted">{% trans "Products" %}: {{ report.total_products }}</small>
+                        </a>
+                        {% empty %}
+                        <p class="text-center">{% trans "No reports found" %}</p>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

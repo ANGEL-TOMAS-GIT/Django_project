@@ -21,7 +21,7 @@ if [ "$RESTORE_DUMP" = "true" ] || [ "$RESTORE_DUMP" = "1" ]; then
 
          echo "Dump successfully loaded"
     else
-         echo "RESTORE_DUMP=true but no dump found"
+         echo "RESTORE_DUMP=true but no dump found at: $DUMP_FILE"
     fi
 else
      echo "Restore dump skipped"

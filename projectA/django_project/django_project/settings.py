@@ -14,10 +14,6 @@ from pathlib import Path
 from dotenv import load_dotenv
 from datetime import timedelta
 from django.utils.translation import gettext_lazy as _
-from operator import truediv
-from django.conf.global_settings import CSRF_TRUSTED_ORIGINS, CSRF_COOKIE_SAMESITE, SESSION_COOKIE_SECURE, SECURE_SSL_REDIRECT, \
-    SECURE_PROXY_SSL_HEADER, X_FRAME_OPTIONS
-from wcwidth import propagate_sgr
 
 load_dotenv()
 
@@ -49,14 +45,18 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    
+    
     'storages',
     'rest_framework',
     'rest_framework.authtoken',
     'rest_framework_simplejwt',
+    
+    
+    
     'books.apps.BooksConfig',
     'custom_user_account.apps.CustomUserAccountConfig',
     'payments.apps.PaymentsConfig',
-    # 'debug_toolbar',
     'mptt',
     'django_celery_beat'
 ]
@@ -299,15 +299,16 @@ LOGGING = {
         },
     },
 }
-#
-# CHANNEL_LAYERS = {
-#     'default': {
-#         'BACKEND': 'channels_redis.core.RedisChannelLayer',
-#         'CONFIG': {
-#             'hosts': [('redis', 6379)]
-#         }
-#     }
-# }
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            'hosts': [('redis', 6379)]
+        }
+    }
+}
+
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.redis.RedisCache',
@@ -338,8 +339,8 @@ CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
 
 CART_SESSION_ID = 'cart'
 
-STRIPE_PUBLIC_KEY = ''
-STRIPE_SECRET_KEY = ''
+STRIPE_PUBLIC_KEY = 'pk_test_51TL7hoDWOqHZn15QuKbsTN8Ac4UgtiiIl87dCN4vJNisjykGfxfrc6Z5FFJ93yxLVHLZ8Lne79795m3jOOsZfEC100qNC7aSdB'
+STRIPE_SECRET_KEY = 'sk_test_51TL7hoDWOqHZn15QpUhqu84LogbnZ6IGUI677X9xvYmeQwrKgkT9JopfAfho5qgE7CfhsvAWeqX8jBu72ls7LnbH00FqglE973'
 
 ###################################################
 #             REST_FRAMEWORK                      #
@@ -431,8 +432,6 @@ from sentry_sdk.integrations.django import DjangoIntegration
 from sentry_sdk.integrations.logging import LoggingIntegration
 from sentry_sdk.integrations.celery import CeleryIntegration
 from sentry_sdk.integrations.redis import RedisIntegration
-
-
 
 IS_GITHUB_ACTIONS = os.getenv('GITHUB_ACTIONS') == 'true'
 if not IS_GITHUB_ACTIONS:

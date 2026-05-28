@@ -1,0 +1,78 @@
+# Arabic translations for Warehouse Management System
+msgid ""
+msgstr ""
+"Project-Id-Version: Warehouse Management System 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-05-27 12:49+0200\n"
+"PO-Revision-Date: 2026-05-27 13:00+0200\n"
+"Last-Translator: Angel Tomas <angel@example.com>\n"
+"Language-Team: Arabic Team <ar@li.org>\n"
+"Language: ar\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 ? 4 : 5;\n"
+
+#: templates/base.html
+msgid "Warehouse Management"
+msgstr "إدارة المستودعات"
+
+#: templates/base.html
+msgid "Dashboard"
+msgstr "لوحة التحكم"
+
+#: templates/base.html
+msgid "Inventory"
+msgstr "المخزون"
+
+#: templates/base.html
+msgid "Warehouses"
+msgstr "المستودعات"
+
+#: templates/base.html
+msgid "Reports"
+msgstr "التقارير"
+
+#: templates/base.html
+msgid "Alerts"
+msgstr "التنبيهات"
+
+#: templates/base.html
+msgid "Login"
+msgstr "تسجيل الدخول"
+
+#: templates/base.html
+msgid "Logout"
+msgstr "تسجيل الخروج"
+
+#: templates/dashboard.html
+msgid "Total Products"
+msgstr "إجمالي المنتجات"
+
+#: templates/dashboard.html
+msgid "Low Stock Items"
+msgstr "عناصر المخزون المنخفض"
+
+#: templates/dashboard.html
+msgid "Active Alerts"
+msgstr "التنبيهات النشطة"
+
+#: templates/dashboard.html
+msgid "Recent Stock Movements"
+msgstr "حركات المخزون الأخيرة"
+
+#: templates/inventory/product_list.html
+msgid "Products"
+msgstr "المنتجات"
+
+#: templates/inventory/product_list.html
+msgid "Add Product"
+msgstr "إضافة منتج"
+
+#: inventory/views.py:64
+msgid "Sync started"
+msgstr "بدأت المزامنة"
+
+#: inventory/views.py:87
+msgid "Insufficient stock"
+msgstr "مخزون غير كاف"
