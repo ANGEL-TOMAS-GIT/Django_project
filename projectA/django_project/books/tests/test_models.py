@@ -6,6 +6,7 @@ from .factories import BookFactory, CategoryFactory
 @pytest.mark.django_db
 def test_category_creation():
     category = Category.objects.create(name="Fantasy", slug="fantasy")
+
     assert category.name == "Fantasy"
     assert str(category) == "Fantasy"
 
@@ -20,31 +21,31 @@ def test_book_creation():
         stock=10,
         is_active=True
     )
+
     assert book.title == "Dune"
-    assert book.price == 25.99
+    assert float(book.price) == 25.99
     assert book.stock == 10
     assert book.is_active is True
 
 
 @pytest.mark.django_db
 def test_book_price_positive():
-    category = CategoryFactory()
-    book = BookFactory(category=category, price=15.50)
+    book = BookFactory(price=15.50)
+
     assert book.price > 0
 
 
 @pytest.mark.django_db
 def test_book_stock_not_negative():
-    category = CategoryFactory()
-    book = BookFactory(category=category, stock=0)
+    book = BookFactory(stock=0)
+
     assert book.stock >= 0
 
 
 @pytest.mark.django_db
 def test_book_active_filter():
-    category = CategoryFactory()
-    active_book = BookFactory(category=category, is_active=True)
-    inactive_book = BookFactory(category=category, is_active=False)
+    active_book = BookFactory(is_active=True, stock=5)
+    inactive_book = BookFactory(is_active=False, stock=5)
 
     active_books = Book.objects.filter(is_active=True)
 

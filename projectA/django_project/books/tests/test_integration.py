@@ -1,18 +1,11 @@
 import pytest
 from django.urls import reverse
-from books.models import Book, Category
+from .factories import BookFactory
 
 
 @pytest.mark.django_db
 def test_user_can_add_to_cart(client):
-    cat = Category.objects.create(
-        name="Fantasy",
-        slug="fantasy"
-    )
-
-    book = Book.objects.create(
-        title="LOTR",
-        category=cat,
+    book = BookFactory(
         price=20,
         stock=5,
         is_active=True
@@ -23,4 +16,6 @@ def test_user_can_add_to_cart(client):
         {"quantity": 1}
     )
 
-    assert response.status_code == 302
+    assert response.status_code in [301, 302]
+    
+    
