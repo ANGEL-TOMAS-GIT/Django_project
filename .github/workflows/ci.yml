@@ -164,7 +164,7 @@ jobs:
           pip install coverage
 
       - name: Run migrations
-        run: python manage.py migrate
+        run: python projectB/warehouse/manage.py migrate
         env:
           DB_TYPE: postgres
           POSTGRES_DB: test_db
@@ -176,7 +176,7 @@ jobs:
           REDIS_PORT: 6379
 
       - name: Create groups
-        run: python manage.py create_groups
+        run: python projectB/warehouse/manage.py create_groups
         env:
           DB_TYPE: postgres
           POSTGRES_DB: test_db
@@ -187,7 +187,7 @@ jobs:
 
       - name: Run tests with coverage
         run: |
-          coverage run manage.py test accounts inventory analytics
+          coverage run projectB/warehouse/manage.py test accounts inventory analytics
           coverage report --fail-under=70
         env:
           DB_TYPE: postgres
