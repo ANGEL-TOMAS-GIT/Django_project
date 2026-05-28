@@ -262,20 +262,16 @@ SIMPLE_JWT = {
 
 CACHES = {
     'default': {
-        'BACKEND': 'django_redis.cache.RedisCache',
+        'BACKEND': 'django.core.cache.backends.redis.RedisCache',
         'LOCATION': 'redis://redis:6379/1',
-        'OPTIONS': {
-            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
-            'CONNECTION_POOL_CLASS': 'redis.BlockingConnectionPool',
-            'CONNECTION_POOL_CLASS_KWARGS': {
-                'max_connections': 50,
-                'timeout': 20,
-            },
-            'MAX_CONNECTIONS': 1000,
-            'PICKLE_VERSION': -1,
-        },
-        'KEY_PREFIX': 'warehouse',
-        'TIMEOUT': 300,  # 5 minutes default timeout
+        'TIMEOUT': 5 * 60,
+        'KEY_PREFIX': 'warehouse'
+    },
+    'page_cache': {
+        'BACKEND': 'django.core.cache.backends.redis.RedisCache',
+        'LOCATION': 'redis://redis:6379/1',
+        'TIMEOUT': 15 * 60,
+        'KEY_PREFIX': 'warehouse_page'
     }
 }
 
