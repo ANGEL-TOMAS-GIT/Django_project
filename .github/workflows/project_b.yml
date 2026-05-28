@@ -88,22 +88,24 @@ jobs:
           POSTGRES_HOST: localhost
           POSTGRES_PORT: 5432
 
-#      - name: Run tests with coverage
-#        run: |
-#          coverage run projectB/warehouse/manage.py test accounts inventory analytics
-#          coverage report --fail-under=70
-#        env:
-#          POSTGRES_DB: test_db
-#          POSTGRES_USER: test_user
-#          POSTGRES_PASSWORD: test_password
-#          POSTGRES_HOST: localhost
-#          POSTGRES_PORT: 5432
-#
-#      - name: Upload coverage report
-#        uses: actions/upload-artifact@v4
-#        with:
-#          name: coverage-report
-#          path: .coverage
+      - name: Run tests with coverage
+        run: |
+          coverage run projectB/warehouse/manage.py test accounts inventory analytics
+          coverage report --fail-under=70
+        env:
+          POSTGRES_DB: test_db
+          POSTGRES_USER: test_user
+          POSTGRES_PASSWORD: test_password
+          POSTGRES_HOST: localhost
+          POSTGRES_PORT: 5432
+          REDIS_HOST: localhost
+          REDIS_PORT: 6379
+
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: .coverage
 
   security:
     runs-on: ubuntu-latest
