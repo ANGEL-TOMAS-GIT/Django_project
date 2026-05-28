@@ -94,8 +94,8 @@ jobs:
             --cov-report=xml \
             --cov-fail-under=70 \
             -v
-          coverage run --source='books,payments,custom_user_account' projectA/django_project/manage.py test books payments custom_user_account
-          coverage report --fail-under=70
+#          coverage run --source='books,payments,custom_user_account' projectA/django_project/manage.py test books payments custom_user_account
+#          coverage report --fail-under=70
         env:
           DJANGO_SETTINGS_MODULE: django_project.settings
           POSTGRES_DB: test_db
