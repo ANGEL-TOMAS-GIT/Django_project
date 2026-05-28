@@ -29,5 +29,3 @@ def test_order_creation(client):
 def test_order_create_view_accessible(client):
     response = client.get(reverse("order_create"), follow=True)
     assert response.status_code == 200
-
-    

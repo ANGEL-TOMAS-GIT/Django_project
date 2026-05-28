@@ -72,6 +72,5 @@ class BookAPITest(APITestCase):
     def test_list_books(self):
         url = reverse('books')
         response = self.client.get(url, follow=True)
-        
+
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        
