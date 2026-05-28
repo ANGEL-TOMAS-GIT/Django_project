@@ -47,3 +47,23 @@ class UserModelTest(TestCase):
             password='strpass'
         )
         self.assertEqual(str(user), 'struser@test.com')
+    
+    def test_user_phone_number_required(self):
+        with self.assertRaises(Exception):
+            get_user_manager().create_user(
+                email='nophone@test.com',
+                password='pass123'
+            )
+    
+    def test_user_phone_number_unique(self):
+        user1 = get_user_manager().create_user(
+            email='unique1@test.com',
+            phone_number='1111111111',
+            password='pass123'
+        )
+        with self.assertRaises(Exception):
+            get_user_manager().create_user(
+                email='unique2@test.com',
+                phone_number='1111111111',  # mismo número
+                password='pass456'
+            )

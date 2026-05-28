@@ -26,6 +26,7 @@ def test_book_creation():
     assert float(book.price) == 25.99
     assert book.stock == 10
     assert book.is_active is True
+    assert book.slug is not None
 
 
 @pytest.mark.django_db
@@ -51,3 +52,9 @@ def test_book_active_filter():
 
     assert active_book in active_books
     assert inactive_book not in active_books
+
+    
+@pytest.mark.django_db
+def test_book_price_decimal_places():
+    book = BookFactory(price=19.99)
+    assert float(book.price) == 19.99

@@ -17,5 +17,3 @@ def test_user_can_add_to_cart(client):
     )
 
     assert response.status_code in [301, 302]
-    
-    

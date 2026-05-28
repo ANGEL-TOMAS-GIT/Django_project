@@ -46,4 +46,3 @@ def test_cart_remove(client):
     response = client.post(reverse("cart_remove", args=[book.pk]))
 
     assert response.status_code in [301, 302]
-    

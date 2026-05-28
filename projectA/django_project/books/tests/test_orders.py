@@ -22,14 +22,12 @@ def test_order_creation(client):
             "address": "123 Main St"
         }
     )
-
     assert response.status_code in [301, 302]
 
 
 @pytest.mark.django_db
 def test_order_create_view_accessible(client):
     response = client.get(reverse("order_create"), follow=True)
-
-
     assert response.status_code == 200
+
     

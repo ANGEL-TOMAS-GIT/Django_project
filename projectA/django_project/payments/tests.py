@@ -36,3 +36,19 @@ class PaymentModelTest(TestCase):
         )
 
         self.assertIsNotNone(str(payment))
+    
+    def test_payment_status_default(self):
+        payment = Payment.objects.create(
+            user=self.user,
+            amount=30.00
+        )
+        
+        self.assertEqual(payment.status, 'pending')
+        
+    def test_payment_amount_positive(self):
+            payment = Payment.objects.create(
+                user=self.user,
+                amount=10.00,
+                status='pending'
+            )
+            self.assertGreater(payment.amount, 0)
