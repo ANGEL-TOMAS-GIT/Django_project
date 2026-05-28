@@ -31,7 +31,7 @@ class BaseWarehouseViewSet(ModelViewSet):
     
     def perform_create(self, serializer):
         instance = serializer.save()
-        cache.delete_pattern(f"{self.queryset.model.__name__.lower()}_list")
+        cache.delete(f"{self.queryset.model.__name__.lower()}_list")
         return instance
 
 
