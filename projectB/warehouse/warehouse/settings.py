@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 import os
+import sys
+import logging
 from pathlib import Path
 from datetime import timedelta
 from celery.schedules import crontab
@@ -201,10 +203,8 @@ STATIC_ROOT = BASE_DIR / 'static'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
-
 LOGS_DIR = BASE_DIR / 'logs'
 LOGS_DIR.mkdir(exist_ok=True)
-
 
 ################################################
 #         Default Primary Key Field           #
@@ -260,20 +260,28 @@ SIMPLE_JWT = {
 #         Redis Cache Configuration           #
 ################################################
 
-CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.redis.RedisCache',
-        'LOCATION': 'redis://redis:6379/1',
-        'TIMEOUT': 5 * 60,
-        'KEY_PREFIX': 'warehouse'
-    },
-    'page_cache': {
-        'BACKEND': 'django.core.cache.backends.redis.RedisCache',
-        'LOCATION': 'redis://redis:6379/1',
-        'TIMEOUT': 15 * 60,
-        'KEY_PREFIX': 'warehouse_page'
+if 'test' in sys.argv:
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
+        }
     }
-}
+    logging.info("=== Using DummyCache for tests ===")
+else:
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.redis.RedisCache',
+            'LOCATION': 'redis://redis:6379/1',
+            'TIMEOUT': 5 * 60,
+            'KEY_PREFIX': 'warehouse'
+        },
+        'page_cache': {
+            'BACKEND': 'django.core.cache.backends.redis.RedisCache',
+            'LOCATION': 'redis://redis:6379/1',
+            'TIMEOUT': 15 * 60,
+            'KEY_PREFIX': 'warehouse_page'
+        }
+    }
 
 ################################################
 #         Celery Configuration                #
