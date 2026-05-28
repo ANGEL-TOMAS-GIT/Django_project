@@ -42,8 +42,8 @@ def test_home_page_redirects(client):
 def test_create_book_view_requires_login(client):
     response = client.get(reverse('create_book'))
     assert response.status_code in [301, 302]
-    
-    
+
+
 @pytest.mark.django_db
 def test_manage_books_view_requires_login(client):
     response = client.get(reverse("manage_books"))
