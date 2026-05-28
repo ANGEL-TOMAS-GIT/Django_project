@@ -4,8 +4,8 @@ from django.urls import reverse
 from rest_framework.test import APITestCase
 from rest_framework import status
 from books.models import Book
+from custom_user_account.models import CustomUser as User
 
-User = get_user_model()
 
 class BookModelTest(TestCase):
     def setUp(self):
