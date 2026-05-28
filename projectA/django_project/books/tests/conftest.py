@@ -1,33 +1,25 @@
 import pytest
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
+from django.test import Client
 from books.models import Book, Category
 
 
-# =========================
-# CLIENT
-# =========================
-
 @pytest.fixture
 def client():
-    from django.test import Client
     return Client()
 
 
-# =========================
-# USER
-# =========================
-
 @pytest.fixture
 def user():
-    return User.objects.create_user(
-        username="test_user",
+    User = get_user_model()
+    manager = getattr(User, "objects", None) or getattr(User, "object")
+
+    return manager.create_user(
+        email="test_user@example.com",
+        phone_number="1112223333",
         password="12345"
     )
 
-
-# =========================
-# CATEGORY
-# =========================
 
 @pytest.fixture
 def category():
@@ -36,10 +28,6 @@ def category():
         slug="fantasy"
     )
 
-
-# =========================
-# BOOK
-# =========================
 
 @pytest.fixture
 def book(category):
