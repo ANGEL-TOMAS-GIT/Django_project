@@ -56,7 +56,7 @@ class UserModelTest(TestCase):
             )
 
     def test_user_phone_number_unique(self):
-        user1 = get_user_manager().create_user(
+        get_user_manager().create_user(
             email='unique1@test.com',
             phone_number='1111111111',
             password='pass123'

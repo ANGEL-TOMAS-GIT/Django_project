@@ -53,7 +53,7 @@ def test_book_active_filter():
     assert active_book in active_books
     assert inactive_book not in active_books
 
-    
+
 @pytest.mark.django_db
 def test_book_price_decimal_places():
     book = BookFactory(price=19.99)
