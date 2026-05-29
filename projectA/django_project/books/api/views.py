@@ -94,45 +94,45 @@ class CheckStockView(APIView):
 
 
 class ReserveStockView(APIView):
-        permission_classes = []
+    permission_classes = []
 
-        def post(self, request, product_id):
-            # Check API Key
-            api_key = request.headers.get('X-API-Key')
-            if api_key != settings.WAREHOUSE_API_KEY:
-                return Response({'error': 'Invalid API Key'}, status=401)
+    def post(self, request, product_id):
+        # Check API Key
+        api_key = request.headers.get('X-API-Key')
+        if api_key != settings.WAREHOUSE_API_KEY:
+            return Response({'error': 'Invalid API Key'}, status=401)
 
-            try:
-                book = Book.objects.get(id=product_id, is_active=True)
-                quantity = request.data.get('quantity', 0)
-                order_id = request.data.get('order_id')
+        try:
+            book = Book.objects.get(id=product_id, is_active=True)
+            quantity = request.data.get('quantity', 0)
+            order_id = request.data.get('order_id')
 
-                if not quantity or quantity <= 0:
-                    return Response({
-                        'error': 'Invalid quantity',
-                        'quantity': quantity
-                    }, status=400)
+            if not quantity or quantity <= 0:
+                return Response({
+                    'error': 'Invalid quantity',
+                    'quantity': quantity
+                }, status=400)
 
-                if book.stock >= quantity:
-                    book.stock -= quantity
-                    book.save()
+            if book.stock >= quantity:
+                book.stock -= quantity
+                book.save()
 
-                    return Response({
-                        'success': True,
-                        'product_id': book.id,
-                        'product_name': book.title,
-                        'reserved_quantity': quantity,
-                        'remaining_stock': book.stock,
-                        'order_id': order_id
-                    }, status=200)
-                else:
-                    return Response({
-                        'success': False,
-                        'error': 'Insufficient stock',
-                        'available': book.stock,
-                        'requested': quantity,
-                        'product_id': product_id
-                    }, status=400)
+                return Response({
+                    'success': True,
+                    'product_id': book.id,
+                    'product_name': book.title,
+                    'reserved_quantity': quantity,
+                    'remaining_stock': book.stock,
+                    'order_id': order_id
+                }, status=200)
+            else:
+                return Response({
+                    'success': False,
+                    'error': 'Insufficient stock',
+                    'available': book.stock,
+                    'requested': quantity,
+                    'product_id': product_id
+                }, status=400)
 
-            except Book.DoesNotExist:
-                return Response({'error': 'Product not found'}, status=404)
+        except Book.DoesNotExist:
+            return Response({'error': 'Product not found'}, status=404)
