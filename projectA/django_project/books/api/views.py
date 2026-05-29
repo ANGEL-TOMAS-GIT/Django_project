@@ -92,6 +92,7 @@ class CheckStockView(APIView):
         except Book.DoesNotExist:
             return Response({'error': 'Product not found'}, status=404)
 
+
 class ReserveStockView(APIView):
         permission_classes = []
 
