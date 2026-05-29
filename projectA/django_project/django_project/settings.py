@@ -365,7 +365,7 @@ REST_FRAMEWORK = {
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=2),
     'REFRESH_TOKEN_LIFETIME': timedelta(minutes=1),
-    'AUTH_HEADER_TYPES': ('Django',),
+    'AUTH_HEADER_TYPES': ('Bearer',),
     'USER_ID_FIELDS': ['id', 'email']
 }
 
@@ -444,3 +444,5 @@ if not IS_GITHUB_ACTIONS:
         environment='development' if DEBUG else 'production-project',
         send_default_pii=True,
     )
+
+WAREHOUSE_API_KEY = "warehouse-secret-key-2024"

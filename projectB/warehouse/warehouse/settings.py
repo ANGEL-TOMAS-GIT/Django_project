@@ -470,15 +470,6 @@ SPECTACULAR_SETTINGS = {
     },
 }
 
-################################################
-#         ProjectA Communication              #
-################################################
-
-# ProjectA URL for inter-service communication
-PROJECTA_URL = os.getenv('PROJECTA_URL', 'http://localhost:8000')
-PROJECTA_API_USER = os.getenv('PROJECTA_API_USER', 'warehouse_service')
-PROJECTA_API_PASSWORD = os.getenv('PROJECTA_API_PASSWORD', '')
-
 ###################################################
 #               SENTRY-CONF                       #
 ###################################################
