@@ -17,24 +17,24 @@ class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
 
 class BookViewSet(viewsets.ReadOnlyModelViewSet):
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
-    
+
     search_fields = ['title', 'description']
     ordering_fields = ['price', 'title']
     lookup_field = 'slug'
-    
+
     def get_queryset(self):
         qs = Book.active.all().select_related('category')
-        
+
         min_price = self.request.query_params.get('min_price')
         max_price = self.request.query_params.get('max_price')
         if min_price:
             qs = qs.filter(price__gte=min_price)
-        
+
         if max_price:
             qs = qs.filter(price__lte=max_price)
-        
+
         return qs
-    
+
     def get_serializer_class(self):
         if self.action == 'retrieve':
             return BookDetailSerializer
@@ -43,7 +43,7 @@ class BookViewSet(viewsets.ReadOnlyModelViewSet):
 
 class GEtTokenPAirView(APIView):
     permission_classes = [AllowAny]
-    
+
     def post(self, request):
         user = authenticate(
             email=request.data.get('email'),
@@ -51,7 +51,7 @@ class GEtTokenPAirView(APIView):
         )
         if not user:
             return Response({'error': 'invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
-        
+
         return Response({
             'access': create_access_token(user),
             'refresh': create_refresh_token(user)
@@ -60,7 +60,7 @@ class GEtTokenPAirView(APIView):
 
 class RefreshTokenView(APIView):
     permission_classes = [AllowAny]
-    
+
     def post(self, request):
         pass
 
@@ -72,13 +72,13 @@ class RefreshTokenView(APIView):
 
 class CheckStockView(APIView):
     permission_classes = []  # No JWT required
-    
+
     def get(self, request, product_id):
         # Check API Key
         api_key = request.headers.get('X-API-Key')
         if api_key != settings.WAREHOUSE_API_KEY:
             return Response({'error': 'Invalid API Key'}, status=401)
-        
+
         try:
             book = Book.objects.get(id=product_id, is_active=True)
             return Response({
@@ -91,31 +91,31 @@ class CheckStockView(APIView):
             })
         except Book.DoesNotExist:
             return Response({'error': 'Product not found'}, status=404)
-    
+
 class ReserveStockView(APIView):
         permission_classes = []  # No JWT required
-        
+
         def post(self, request, product_id):
             # Check API Key
             api_key = request.headers.get('X-API-Key')
             if api_key != settings.WAREHOUSE_API_KEY:
                 return Response({'error': 'Invalid API Key'}, status=401)
-            
+
             try:
                 book = Book.objects.get(id=product_id, is_active=True)
                 quantity = request.data.get('quantity', 0)
                 order_id = request.data.get('order_id')
-                
+
                 if not quantity or quantity <= 0:
                     return Response({
                         'error': 'Invalid quantity',
                         'quantity': quantity
                     }, status=400)
-                
+
                 if book.stock >= quantity:
                     book.stock -= quantity
                     book.save()
-                    
+
                     return Response({
                         'success': True,
                         'product_id': book.id,
@@ -132,6 +132,6 @@ class ReserveStockView(APIView):
                         'requested': quantity,
                         'product_id': product_id
                     }, status=400)
-            
+
             except Book.DoesNotExist:
                 return Response({'error': 'Product not found'}, status=404)
