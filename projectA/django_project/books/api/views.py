@@ -93,7 +93,7 @@ class CheckStockView(APIView):
             return Response({'error': 'Product not found'}, status=404)
 
 class ReserveStockView(APIView):
-        permission_classes = []  # No JWT required
+        permission_classes = []
 
         def post(self, request, product_id):
             # Check API Key
