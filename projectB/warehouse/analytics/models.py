@@ -76,7 +76,12 @@ class StockAlert(models.Model):
         related_name='resolved_alerts')
     resolution_notes = models.TextField(blank=True)
 
-    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, related_name='created_alerts')
+    created_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        related_name='created_alerts'
+    )
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
