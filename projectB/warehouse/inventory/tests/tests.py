@@ -5,7 +5,7 @@ from rest_framework.test import APITestCase
 from rest_framework import status
 from django.urls import reverse
 from model_bakery import baker
-from .models import Warehouse, ProductStock, StockMovement
+from inventory.models import Warehouse, ProductStock, StockMovement
 
 User = get_user_model()
 

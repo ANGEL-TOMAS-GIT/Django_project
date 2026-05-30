@@ -506,3 +506,5 @@ CSRF_TRUSTED_ORIGINS = [
     'https://127.0.0.1:8443',
     'https://192.168.1.3:8443',
 ]
+PROJECTA_URL = os.getenv('PROJECTA_URL')
+PROJECTA_API_KEY = os.getenv('PROJECTA_API_KEY')
