@@ -19,16 +19,16 @@ from accounts.permissions import HasGroupPermission
 class BaseWarehouseViewSet(ModelViewSet):
     permission_classes = [IsAuthenticated, HasGroupPermission]
     cache_timeout = 300  # 5 minutes
-    
+
     def get_cached_response(self, cache_key, queryset, serializer_class):
         cached_data = cache.get(cache_key)
         if cached_data:
             return Response(cached_data)
-        
+
         serializer = serializer_class(queryset, many=True)
         cache.set(cache_key, serializer.data, self.cache_timeout)
         return Response(serializer.data)
-    
+
     def perform_create(self, serializer):
         instance = serializer.save()
         cache.delete(f"{self.queryset.model.__name__.lower()}_list")
@@ -39,7 +39,7 @@ class WarehouseViewSet(BaseWarehouseViewSet):
     queryset = Warehouse.objects.filter(is_active=True)
     serializer_class = WarehouseSerializer
     required_group = ['warehouse_manager', 'admin']
-    
+
     @action(detail=True, methods=['get'])
     def stocks(self, request, pk=None):
         warehouse = self.get_object()
@@ -56,7 +56,7 @@ class ProductStockViewSet(BaseWarehouseViewSet):
     search_fields = ['sku', 'name']
     ordering_fields = ['quantity', 'last_updated']
     required_group = ['warehouse_manager', 'admin', 'warehouse_staff', 'viewer']
-    
+
     @action(detail=False, methods=['post'])
     def sync_with_projecta(self, request):
         """Synchronize stock with ProjectA products"""
@@ -65,21 +65,21 @@ class ProductStockViewSet(BaseWarehouseViewSet):
             'message': _('Sync started'),
             'task_id': task.id
         }, status=status.HTTP_202_ACCEPTED)
-    
+
     @action(detail=True, methods=['post'])
     def adjust_stock(self, request, pk=None):
         stock = self.get_object()
         quantity = request.data.get('quantity')
         movement_type = request.data.get('movement_type')
-        
+
         if not quantity or not movement_type:
             return Response(
                 {'error': _('quantity and movement_type required')},
                 status=status.HTTP_400_BAD_REQUEST
             )
-        
+
         old_quantity = stock.quantity
-        
+
         if movement_type == 'IN':
             stock.quantity += int(quantity)
         elif movement_type == 'OUT':
@@ -94,9 +94,9 @@ class ProductStockViewSet(BaseWarehouseViewSet):
                 {'error': _('Invalid movement_type. Use IN or OUT')},
                 status=status.HTTP_400_BAD_REQUEST
             )
-        
+
         stock.save()
-        
+
         # Create movement record
         StockMovement.objects.create(
             product_stock=stock,
@@ -105,16 +105,15 @@ class ProductStockViewSet(BaseWarehouseViewSet):
             notes=request.data.get('notes', ''),
             created_by=request.user
         )
-        
+
         # Check low stock
         if stock.quantity <= stock.min_stock_threshold:
             check_all_low_stock .delay(stock.id)
-        
+
         # Clear cache
         cache.delete(f"product_stock_{stock.id}")
-        
         return Response(ProductStockSerializer(stock).data)
-    
+
     @action(detail=False, methods=['get'])
     def low_stock(self, request):
         low_stock_items = self.get_queryset().filter(

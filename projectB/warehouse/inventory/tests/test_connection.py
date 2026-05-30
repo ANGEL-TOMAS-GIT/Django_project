@@ -65,7 +65,7 @@ class ConnectionTest(TestCase):
         self.assertIn('/api/stock/1/reserve/', args[0])
         self.assertEqual(kwargs['json']['quantity'], 1)
         print("✅ reserve_stock test passed")
-    
+
     @patch('inventory.services.requests.get')
     def test_check_stock_handles_error(self, mock_get):
         """Test that check_stock handles errors gracefully"""

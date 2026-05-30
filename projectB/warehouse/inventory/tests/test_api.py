@@ -11,7 +11,7 @@ User = get_user_model()
 
 
 class BaseAPITestCase(APITestCase):
-    
+
     def setUp(self):
         # Create a user
         self.user = User.objects.create_user(

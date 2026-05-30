@@ -14,19 +14,19 @@ def generate_daily_inventory_report():
     from .models import ProductStock, StockMovement
     from analytics.models import InventoryReport
     from django.db.models import Sum
-    
+
     yesterday = timezone.now() - timedelta(days=1)
-    
+
     total_products = ProductStock.objects.count()
     low_stock_count = ProductStock.objects.filter(
         quantity__lte=F('min_stock_threshold')
     ).count()
     out_of_stock_count = ProductStock.objects.filter(quantity=0).count()
-    
+
     movements = StockMovement.objects.filter(
         created_at__gte=yesterday
     ).values('movement_type').annotate(total=Sum('quantity'))
-    
+
     report = InventoryReport.objects.create(
         date=timezone.now().date(),
         report_type='daily',
@@ -39,7 +39,7 @@ def generate_daily_inventory_report():
             'timestamp': str(timezone.now())
         }
     )
-    
+
     cache.set('daily_inventory_report', report.report_data, 86400)
     logger.info(f"Daily report generated: {report.id}")
     return f"Report {report.id} generated"
@@ -50,21 +50,21 @@ def check_all_low_stock():
     from .models import ProductStock
     from analytics.models import StockAlert
     from django.contrib.auth import get_user_model
-    
+
     User = get_user_model()
     admin_user = User.objects.filter(is_superuser=True).first()
-    
+
     if not admin_user:
         admin_user = User.objects.create_superuser(
             username='admin_task',
             email='admin@task.com',
             password='temp123'
         )
-    
+
     low_stock_products = ProductStock.objects.filter(
         quantity__lte=F('min_stock_threshold')
     )
-    
+
     alerts_created = 0
     for product in low_stock_products:
         alert, created = StockAlert.objects.get_or_create(
@@ -81,7 +81,7 @@ def check_all_low_stock():
         )
         if created:
             alerts_created += 1
-    
+
     logger.info(f"Created {alerts_created} low stock alerts")
     return f"Created {alerts_created} alerts"
 
@@ -91,10 +91,10 @@ def check_low_stock(product_stock_id):
     from .models import ProductStock
     from analytics.models import StockAlert
     from django.contrib.auth import get_user_model
-    
+
     User = get_user_model()
     admin_user = User.objects.filter(is_superuser=True).first()
-    
+
     try:
         product = ProductStock.objects.get(id=product_stock_id)
         if product.quantity <= product.min_stock_threshold:
@@ -119,7 +119,7 @@ def check_low_stock(product_stock_id):
 def sync_product_with_projecta():
     from django.conf import settings
     import requests
-    
+
     try:
         response = requests.get(
             f"{settings.PROJECTA_URL}/api/products/",
