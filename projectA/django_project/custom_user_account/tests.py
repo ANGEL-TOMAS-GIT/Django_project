@@ -67,12 +67,12 @@ class UserModelTest(TestCase):
                 phone_number='1111111111',  # mismo número
                 password='pass456'
             )
-    
+
     def test_user_admin_registered(self):
         from django.contrib import admin
         from custom_user_account.models import CustomUser
         self.assertTrue(admin.site.is_registered(CustomUser))
-    
+
     def test_user_str_returns_email(self):
         user = User.object.create_user(
             email='struser@test.com',

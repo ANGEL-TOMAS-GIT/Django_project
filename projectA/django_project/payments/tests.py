@@ -52,7 +52,7 @@ class PaymentModelTest(TestCase):
                 status='pending'
         )
         self.assertGreater(payment.amount, 0)
-    
+
     def test_payment_urls_exist(self):
         response = self.client.get(reverse('payments:payment-list'))
         self.assertIn(response.status_code, [200, 301, 401, 403])
