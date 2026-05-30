@@ -17,18 +17,18 @@ class InventoryReportViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = InventoryReportSerializer
     permission_classes = [IsAuthenticated]
     filterset_fields = ['report_type', 'status', 'date']
-    
+
     @action(detail=False, methods=['get'])
     def latest(self, request):
         report = self.get_queryset().order_by('-date', '-created_at').first()
         serializer = self.get_serializer(report)
         return Response(serializer.data)
-    
+
     @action(detail=False, methods=['get'])
     def summary(self, request):
         today = timezone.now().date()
         week_ago = today - timedelta(days=7)
-        
+    
         data = {
             'total_reports': InventoryReport.objects.count(),
             'reports_this_week': InventoryReport.objects.filter(date__gte=week_ago).count(),
@@ -47,13 +47,13 @@ class StockAlertViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
     filterset_fields = ['alert_type', 'severity', 'is_resolved']
     search_fields = ['product_stock__sku', 'product_stock__name', 'message']
-    
+
     @action(detail=False, methods=['get'])
     def active(self, request):
         active_alerts = self.get_queryset().filter(is_resolved=False)
         serializer = self.get_serializer(active_alerts, many=True)
         return Response(serializer.data)
-    
+
     @action(detail=True, methods=['post'])
     def resolve(self, request, pk=None):
         alert = self.get_object()

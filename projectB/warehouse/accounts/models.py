@@ -12,22 +12,22 @@ class User(AbstractUser):
         ('warehouse_staff', 'Warehouse Staff'),
         ('viewer', 'Viewer'),
     )
-    
+
     user_type = models.CharField(max_length=20, choices=USER_TYPE_CHOICES, default='viewer')
     phone = models.CharField(max_length=20, blank=True)
     department = models.CharField(max_length=100, blank=True)
-    
+
     def __str__(self):
         return f"{self.username} - {self.get_user_type_display()}"
-    
+
     def save(self, *args, **kwargs):
         is_new = self.pk is None
         super().save(*args, **kwargs)
-        
+
         # Assign group based on user_type
         if is_new:
             self.assign_group()
-    
+
     def assign_group(self):
         """Assign user to appropriate group based on user_type"""
         group_name = self.user_type
@@ -36,7 +36,7 @@ class User(AbstractUser):
             self.groups.add(group)
         except Group.DoesNotExist:
             pass
-    
+
     class Meta:
         db_table = 'accounts_user'
         permissions = [

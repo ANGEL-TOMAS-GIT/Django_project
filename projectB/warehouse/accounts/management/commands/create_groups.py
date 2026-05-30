@@ -1,9 +1,5 @@
 from django.core.management.base import BaseCommand
 from django.contrib.auth.models import Group, Permission
-from django.contrib.contenttypes.models import ContentType
-from inventory.models import ProductStock, Warehouse, StockMovement
-from analytics.models import InventoryReport, StockAlert
-
 class Command(BaseCommand):
     help = 'Create groups and permissions for the warehouse system'
 

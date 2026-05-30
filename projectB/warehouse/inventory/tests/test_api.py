@@ -11,7 +11,6 @@ User = get_user_model()
 
 
 class BaseAPITestCase(APITestCase):
-    """Base class with authenticated user"""
     
     def setUp(self):
         # Create a user
@@ -21,32 +20,32 @@ class BaseAPITestCase(APITestCase):
             password='testpass123',
             user_type='admin'
         )
-        
+
         # Add user to admin group
         admin_group, _ = Group.objects.get_or_create(name='admin')
         self.user.groups.add(admin_group)
-        
+
         # Get JWT token
         response = self.client.post('/api/auth/token/', {
             'username': 'testadmin',
             'password': 'testpass123'
         }, format='json')
-        
+
         self.token = response.data.get('access')
         self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {self.token}')
-        
+
         # Create test data
         self.warehouse = baker.make(Warehouse, is_active=True)
 
 
 class WarehouseAPITest(BaseAPITestCase):
     """Tests for Warehouse API"""
-    
+
     def test_list_warehouses(self):
         url = reverse('warehouse-list')
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-    
+
     def test_create_warehouse(self):
         url = reverse('warehouse-list')
         data = {
@@ -60,19 +59,19 @@ class WarehouseAPITest(BaseAPITestCase):
 
 class StockAPITest(BaseAPITestCase):
     """Tests for Stock API"""
-    
+
     def test_list_stocks(self):
         url = reverse('productstock-list')
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-    
+
     def test_adjust_stock_in(self):
         stock = baker.make(ProductStock, warehouse=self.warehouse, quantity=100)
         url = reverse('productstock-adjust-stock', args=[stock.id])
         data = {'quantity': 50, 'movement_type': 'IN'}
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-    
+
     def test_adjust_stock_out(self):
         stock = baker.make(ProductStock, warehouse=self.warehouse, quantity=100)
         url = reverse('productstock-adjust-stock', args=[stock.id])

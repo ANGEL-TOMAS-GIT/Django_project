@@ -29,7 +29,7 @@ class CustomUserAdmin(UserAdmin):
 
     actions = ['make_warehouse_manager', 'make_warehouse_staff']
 
-    @admin.action(description='Convertir a Warehouse Manager')
+    @admin.action(description='Turn a Warehouse Manager')
     def make_warehouse_manager(self, request, queryset):
         from django.contrib.auth.models import Group
         group, _ = Group.objects.get_or_create(name='warehouse_manager')
@@ -37,9 +37,9 @@ class CustomUserAdmin(UserAdmin):
             user.user_type = 'warehouse'
             user.save()
             user.groups.add(group)
-        self.message_user(request, f"{queryset.count()} usuarios convertidos a Warehouse Manager")
+        self.message_user(request, f"{queryset.count()} User turned a Warehouse Manager")
 
-    @admin.action(description='Convertir a Warehouse Staff')
+    @admin.action(description='Turn a Warehouse Staff')
     def make_warehouse_staff(self, request, queryset):
         from django.contrib.auth.models import Group
         group, _ = Group.objects.get_or_create(name='warehouse_staff')
@@ -47,4 +47,4 @@ class CustomUserAdmin(UserAdmin):
             user.user_type = 'warehouse'
             user.save()
             user.groups.add(group)
-        self.message_user(request, f"{queryset.count()} usuarios convertidos a Warehouse Staff")
+        self.message_user(request, f"{queryset.count()} User turned a Warehouse Staff")

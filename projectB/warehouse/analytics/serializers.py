@@ -5,7 +5,7 @@ from .models import InventoryReport, StockAlert
 
 class InventoryReportSerializer(serializers.ModelSerializer):
     generated_by_name = serializers.CharField(source='generated_by.username', read_only=True)
-    
+
     class Meta:
         model = InventoryReport
         fields = '__all__'
@@ -16,7 +16,7 @@ class StockAlertSerializer(serializers.ModelSerializer):
     product_sku = serializers.CharField(source='product_stock.sku', read_only=True)
     product_name = serializers.CharField(source='product_stock.name', read_only=True)
     created_by_name = serializers.CharField(source='created_by.username', read_only=True)
-    
+
     class Meta:
         model = StockAlert
         fields = '__all__'
