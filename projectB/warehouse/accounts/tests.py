@@ -1,7 +1,6 @@
 # accounts/tests.py
 from django.test import TestCase
 from django.contrib.auth import get_user_model
-from django.contrib.auth.models import Group
 from rest_framework.test import APITestCase
 from rest_framework import status
 from django.urls import reverse

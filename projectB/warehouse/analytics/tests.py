@@ -13,7 +13,7 @@ User = get_user_model()
 
 class AnalyticsModelTests(TestCase):
     """Tests for Analytics Models"""
-    
+
     def setUp(self):
         self.user = User.objects.create_user(
             username='testuser',

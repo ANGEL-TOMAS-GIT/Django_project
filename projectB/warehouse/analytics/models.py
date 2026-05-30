@@ -1,7 +1,6 @@
 # apps/analytics/models.py
 from django.db import models
 from django.conf import settings
-from django.utils.translation import gettext_lazy as _
 
 
 class InventoryReport(models.Model):
@@ -11,26 +10,23 @@ class InventoryReport(models.Model):
         ('monthly', 'Monthly Report'),
         ('custom', 'Custom Report'),
     )
-    
+
     STATUS_CHOICES = (
         ('pending', 'Pending'),
         ('generating', 'Generating'),
         ('completed', 'Completed'),
         ('failed', 'Failed'),
     )
-    
+
     date = models.DateField()
     report_type = models.CharField(max_length=20, choices=REPORT_TYPES)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
     report_data = models.JSONField(default=dict, blank=True)
-
     total_products = models.IntegerField(default=0)
     low_stock_count = models.IntegerField(default=0)
     out_of_stock_count = models.IntegerField(default=0)
     total_value = models.DecimalField(max_digits=12, decimal_places=2, null=True, blank=True)
     most_active_warehouse = models.CharField(max_length=100, blank=True)
-
-
     generated_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
     notes = models.TextField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -72,8 +68,12 @@ class StockAlert(models.Model):
 
     is_resolved = models.BooleanField(default=False)
     resolved_at = models.DateTimeField(null=True, blank=True)
-    resolved_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True,
-                                    related_name='resolved_alerts')
+    resolved_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='resolved_alerts')
     resolution_notes = models.TextField(blank=True)
 
     created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, related_name='created_alerts')

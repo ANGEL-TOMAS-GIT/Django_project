@@ -1,6 +1,6 @@
 from rest_framework.viewsets import ModelViewSet
 from .tasks import check_all_low_stock
-from rest_framework import  status
+from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import action
@@ -77,8 +77,6 @@ class ProductStockViewSet(BaseWarehouseViewSet):
                 {'error': _('quantity and movement_type required')},
                 status=status.HTTP_400_BAD_REQUEST
             )
-
-        old_quantity = stock.quantity
 
         if movement_type == 'IN':
             stock.quantity += int(quantity)

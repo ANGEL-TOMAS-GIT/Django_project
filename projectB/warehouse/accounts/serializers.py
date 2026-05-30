@@ -9,10 +9,21 @@ User = get_user_model()
 class UserSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True, required=True, validators=[validate_password])
     password2 = serializers.CharField(write_only=True, required=True)
-
+    
     class Meta:
         model = User
-        fields = ('id', 'username', 'email', 'password', 'password2', 'first_name', 'last_name', 'user_type', 'phone', 'department')
+        fields = (
+            'id',
+            'username',
+            'email',
+            'password',
+            'password2',
+            'first_name',
+            'last_name',
+            'user_type',
+            'phone',
+            'department'
+        )
         read_only_fields = ('id',)
         extra_kwargs = {
             'user_type': {'required': False, 'default': 'viewer'},
