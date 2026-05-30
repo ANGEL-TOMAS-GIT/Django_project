@@ -54,3 +54,15 @@ def test_manage_books_view_requires_login(client):
 def test_book_detail_404(client):
     response = client.get(reverse("book_detail", args=[99999]), follow=True)
     assert response.status_code == 404
+
+def test_book_update_view_requires_login(client):
+    response = client.get(reverse('update_book', args=[1]))
+    assert response.status_code in [301, 302]
+
+def test_book_delete_view_requires_login(client):
+    response = client.get(reverse('delete_book', args=[1]))
+    assert response.status_code in [301, 302]
+
+def test_cart_view_requires_login(client):
+    response = client.get(reverse('cart_detail'))
+    assert response.status_code in [301, 302]
