@@ -4,7 +4,7 @@
 [![DRF](https://img.shields.io/badge/DRF-3.16-red.svg)](https://www.django-rest-framework.org/)
 [![Docker](https://img.shields.io/badge/Docker-Compose-blue.svg)](https://www.docker.com/)
 [![Coverage](https://img.shields.io/badge/Coverage-84%25-brightgreen.svg)](https://coverage.readthedocs.io/)
-[![CI/CD](https://github.com/yourusername/projectb-warehouse/actions/workflows/project_b.yml/badge.svg)](https://github.com/yourusername/projectb-warehouse/actions/workflows/project_b.yml)
+[![CI/CD](https://github.com/ANGEL-TOMAS-GIT/projectb-warehouse/actions/workflows/project_b.yml/badge.svg)](https://github.com/ANGEL-TOMAS-GIT/projectb-warehouse/actions/workflows/project_b.yml)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 ## 📋 Overview
