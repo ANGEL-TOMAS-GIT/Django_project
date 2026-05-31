@@ -23,7 +23,7 @@ This project demonstrates a **microservices architecture** where two independent
 
 ---
 
-## 🏗 Architecture Diagram
+# 🏗 Architecture Diagram
 
 ```text
 ┌─────────────────────────────────────────────────────────────────────────────────────┐
@@ -89,6 +89,7 @@ This project demonstrates a **microservices architecture** where two independent
 │  │  Communication: GET /api/stock/{id}/ - POST /api/stock/{id}/reserve/    │    │
 │  └─────────────────────────────────────────────────────────────────────────┘    │
 └─────────────────────────────────────────────────────────────────────────────────┘
+```
 
 
 ## 🔗 Inter-Service Communication
@@ -119,6 +120,9 @@ class ProjectAClient:
         )
         return response.json()
 
+```
+
+```text
 
 Project B (Warehouse)                    Project A (Bookstore)
        │                                        
@@ -142,7 +146,7 @@ Project B (Warehouse)                    Project A (Bookstore)
        │  7. Response: {success: true}          │
        │ ◄──────────────────────────────────────│
 
-
+```
 
 ### 2. 📊 Error Handling & Logging
 
@@ -157,6 +161,7 @@ Project B (Warehouse)                    Project A (Bookstore)
 | INFO | `logs/all.log` | General operations |
 | ERROR | `logs/error.log` | Failures and exceptions |
 
+```
 ### Error Handling Strategy
 
 | Scenario | Handling |
@@ -165,6 +170,7 @@ Project B (Warehouse)                    Project A (Bookstore)
 | **Product not found** | Return None with warning log |
 | **Timeout** | Retry up to 3 times, then fail gracefully |
 | **Invalid API Key** | Log error, return 401 equivalent |
+
 
 ### View Logs
 
@@ -176,7 +182,7 @@ docker compose exec app tail -f logs/all.log
 docker compose exec app tail -f logs/error.log
 
 
-
+```
 ### 3. 🔄 CI/CD Pipeline (Detallada)
 
 ```markdown
@@ -192,6 +198,7 @@ docker compose exec app tail -f logs/error.log
 | **Docker** | Build and test Docker image | Lint, Test |
 | **Deploy** | Automatic deployment to production | Docker |
 
+```
 ### Pipeline Configuration
 
 The pipeline runs automatically on:
@@ -208,6 +215,7 @@ The pipeline runs automatically on:
 | `DEPLOY_KEY` | SSH private key |
 
 
+
 ### 4. 🚀 Production Deployment
 
 ```markdown
@@ -222,6 +230,7 @@ The pipeline runs automatically on:
 | **RAM** | Minimum 2GB |
 | **Storage** | Minimum 20GB |
 
+```
 ### Deployment Steps
 
 ```bash
@@ -249,7 +258,7 @@ docker compose exec web python manage.py createsuperuser
 curl https://yourdomain.com/api/inventory/warehouses/
 
 
-
+```
 ### 5. 📈 Sentry Monitoring
 
 ```markdown
@@ -267,7 +276,7 @@ sentry_sdk.init(
 )
 
 
-
+```
 ### 6. 🔒 Security Features (Ampliar)
 
 ```markdown
@@ -285,3 +294,4 @@ sentry_sdk.init(
 | **XSS Protection** | Django templates | Auto-escaping |
 | **CSRF Protection** | `CsrfViewMiddleware` | CSRF prevention |
 | **Secure Headers** | Django SecurityMiddleware | X-Frame-Options, HSTS |
+```
