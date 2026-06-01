@@ -58,7 +58,6 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    # 'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -334,8 +333,8 @@ CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
 
 CART_SESSION_ID = 'cart'
 
-STRIPE_PUBLIC_KEY = 'pk_test_51TL7hoDWOqHZn15QuKbsTN8Ac4UgtiiIl87dCN4vJNisjykGfxfrc6Z5FFJ93yxLVHLZ8Lne79795m3jOOsZfEC100qNC7aSdB'
-STRIPE_SECRET_KEY = 'sk_test_51TL7hoDWOqHZn15QpUhqu84LogbnZ6IGUI677X9xvYmeQwrKgkT9JopfAfho5qgE7CfhsvAWeqX8jBu72ls7LnbH00FqglE973'
+STRIPE_PUBLIC_KEY = ''
+STRIPE_SECRET_KEY = ''
 
 ###################################################
 #             REST_FRAMEWORK                      #
